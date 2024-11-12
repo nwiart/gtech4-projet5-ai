@@ -16,18 +16,6 @@ Entity::Entity(float radius, const sf::Color& color)
 	mShape.setOrigin(0.f, 0.f);
 	mShape.setRadius(radius);
 	mShape.setFillColor(color);
-
-	mHasTarget = false;
-}
-
-void Entity::Destroy()
-{
-	mToDestroy = true;
-}
-
-bool Entity::ToDestroy() const
-{
-	return mToDestroy;
 }
 
 bool Entity::IsColliding(Entity* other) const
@@ -42,6 +30,18 @@ bool Entity::IsColliding(Entity* other) const
 	float sqrRadius = (radius1 + radius2) * (radius1 + radius2);
 
 	return sqrLength < sqrRadius;
+}
+
+bool Entity::IsInside(float x, float y) const
+{
+	sf::Vector2f position = GetPosition(0.5f, 0.5f);
+
+	float dx = x - position.x;
+	float dy = y - position.y;
+
+	float radius = mShape.getRadius();
+
+	return (dx * dx + dy * dy) < (radius * radius);
 }
 
 void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
@@ -70,48 +70,13 @@ void Entity::GoToDirection(float x, float y, float speed)
 	if(speed > 0)
 		mSpeed = speed;
 
-	mDirection.x = x;
-	mDirection.y = y;
+	sf::Vector2f position = GetPosition(0.5f, 0.5f);
+	mDirection = sf::Vector2f(x - position.x, y - position.y);
+	Utils::Normalize(mDirection);
 
 	bool success = Utils::Normalize(mDirection);
 
 	_ASSERT(success);
-
-	mHasTarget = false;
-}
-
-void Entity::GoToPosition(float x, float y, float speed)
-{
-	if (speed > 0)
-		mSpeed = speed;
-
-	sf::Vector2f position = GetPosition(0.5f, 0.5f);
-
-	float dx = x - position.x;
-	float dy = y - position.y;
-
-	mDirection.x = x;
-	mDirection.y = y;
-
-	mTarget.x = x;
-	mTarget.y = y;
-
-	mHasTarget = true;
-}
-
-void Entity::SetTag(int tag)
-{
-	mTag = tag;
-}
-
-bool Entity::IsTag(int tag) const
-{
-	return mTag == tag;
-}
-
-sf::Shape* Entity::GetShape()
-{
-	return &mShape;
 }
 
 void Entity::Update()
@@ -126,24 +91,6 @@ void Entity::Update()
 	translation.y += dt * mSpeed * mDirection.y;
 
 	mShape.move(translation);
-
-	CheckTarget();
-}
-
-void Entity::CheckTarget()
-{
-	if (mHasTarget == false)
-		return;
-
-	sf::Vector2f position = GetPosition(0.5f, 0.5f);
-	sf::Vector2f direction = mTarget - position;
-
-	if (Utils::IsCollinear(direction, mDirection))
-		return;
-
-	SetPosition(mTarget.x, mTarget.y);
-
-	mHasTarget = false;
 }
 
 Scene* Entity::GetScene() const
