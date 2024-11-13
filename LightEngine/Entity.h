@@ -29,8 +29,8 @@ protected:
     int mTag;
 
 public:
-	void GoToDirection(float x, float y, float speed = -1.f);
-	void GoToPosition(float x, float y, float speed = -1.f);
+	bool GoToDirection(float x, float y, float speed = -1.f);
+    bool GoToPosition(float x, float y, float speed = -1.f);
     void SetPosition(float x, float y, float ratioX = 0.f, float ratioY = 0.f);
 	void SetDirection(float x, float y, float speed = -1.f);
 	void SetSpeed(float speed) { mSpeed = speed; }

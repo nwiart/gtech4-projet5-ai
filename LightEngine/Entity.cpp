@@ -67,29 +67,35 @@ sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 	return position;
 }
 
-void Entity::GoToDirection(float x, float y, float speed)
+bool Entity::GoToDirection(float x, float y, float speed)
 {
 	if(speed > 0)
 		mSpeed = speed;
 
 	sf::Vector2f position = GetPosition(0.5f, 0.5f);
-	mDirection = sf::Vector2f(x - position.x, y - position.y);
-	Utils::Normalize(mDirection);
+	sf::Vector2f direction = sf::Vector2f(x - position.x, y - position.y);
+	
+	bool success = Utils::Normalize(direction);
+	if (success == false)
+		return false;
 
-	bool success = Utils::Normalize(mDirection);
+	mDirection = direction;
 
-	_ASSERT(success);
+	return true;
 }
 
-void Entity::GoToPosition(float x, float y, float speed)
+bool Entity::GoToPosition(float x, float y, float speed)
 {
-	GoToDirection(x, y, speed);
+	if (GoToDirection(x, y, speed))
+		return false;
 
 	sf::Vector2f position = GetPosition(0.5f, 0.5f);
 
 	mTarget.position = sf::Vector2f(x, y);
 	mTarget.distance = Utils::GetDistance(position.x, position.y, x, y);
 	mTarget.isSet = true;
+
+	return true;
 }
 
 void Entity::SetDirection(float x, float y, float speed)
