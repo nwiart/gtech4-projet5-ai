@@ -16,6 +16,8 @@ Entity::Entity(float radius, const sf::Color& color)
 	mShape.setOrigin(0.f, 0.f);
 	mShape.setRadius(radius);
 	mShape.setFillColor(color);
+
+	mTarget.isSet = false;
 }
 
 bool Entity::IsColliding(Entity* other) const
@@ -79,18 +81,37 @@ void Entity::GoToDirection(float x, float y, float speed)
 	_ASSERT(success);
 }
 
+void Entity::GoToPosition(float x, float y, float speed)
+{
+	GoToDirection(x, y, speed);
+
+	sf::Vector2f position = GetPosition(0.5f, 0.5f);
+
+	mTarget.position = sf::Vector2f(x, y);
+	mTarget.distance = Utils::GetDistance(position.x, position.y, x, y);
+	mTarget.isSet = true;
+}
+
 void Entity::Update()
 {
 	OnUpdate();
 
 	float dt = GameManager::Get()->GetDeltaTime();
-
-	sf::Vector2f translation;
-
-	translation.x += dt * mSpeed * mDirection.x;
-	translation.y += dt * mSpeed * mDirection.y;
-
+	float distance = dt * mSpeed;
+	sf::Vector2f translation = distance * mDirection;
 	mShape.move(translation);
+
+	if (mTarget.isSet) 
+	{
+		mTarget.distance -= distance;
+
+		if (mTarget.distance <= 0.f)
+		{
+			SetPosition(mTarget.position.x, mTarget.position.y, 0.5f, 0.5f);
+			mDirection = sf::Vector2f(0.f, 0.f);
+			mTarget.isSet = false;
+		}
+	}
 }
 
 Scene* Entity::GetScene() const

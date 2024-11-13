@@ -31,7 +31,7 @@ void SampleScene::HandleInput(const sf::Event& event)
 	{
 		if (pEntitySelected != nullptr) 
 		{
-			pEntitySelected->GoToDirection(event.mouseButton.x, event.mouseButton.y, 100.f);
+			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
 		}
 	}
 }

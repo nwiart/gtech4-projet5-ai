@@ -13,16 +13,24 @@ class Scene;
 
 class Entity
 {
+    struct Target 
+    {
+		sf::Vector2f position;
+        float distance;
+		bool isSet;
+    };
+
 protected:
     sf::CircleShape mShape;
     sf::Vector2f mDirection;
-
+	Target mTarget;
     float mSpeed;
     bool mToDestroy;
     int mTag;
 
 public:
 	void GoToDirection(float x, float y, float speed = -1.f);
+	void GoToPosition(float x, float y, float speed = -1.f);
     void SetPosition(float x, float y, float ratioX = 0.f, float ratioY = 0.f);
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetTag(int tag) { mTag = tag; }
