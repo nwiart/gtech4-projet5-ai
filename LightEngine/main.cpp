@@ -12,7 +12,7 @@ int main()
 {
     GameManager* pInstance = GameManager::Get();
 
-	pInstance->CreateWindow(1280, 720, "Plant VS Zombie");
+	pInstance->CreateWindow(1280, 720, "SampleScene");
 	
 	pInstance->LaunchScene<SampleScene>();
 
