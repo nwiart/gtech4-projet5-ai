@@ -4,14 +4,8 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{a8d0131e-eb50-44ac-848b-7a821ba71b21}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game">
+    <Filter Include="Sample">
       <UniqueIdentifier>{656b759f-efb2-4f59-b546-0dd585a90074}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\StateMachine">
-      <UniqueIdentifier>{54f9566d-eec3-46ad-82d3-6b67b6e11b84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\PlantStateMachine">
-      <UniqueIdentifier>{e5a990fd-2950-4273-9213-ca67aec6d3fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -28,38 +22,14 @@
     <ClCompile Include="Debug.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Plant.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Zombie.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Behaviour.cpp">
-      <Filter>Engine\StateMachine</Filter>
-    </ClCompile>
-    <ClCompile Include="Transition.cpp">
-      <Filter>Engine\StateMachine</Filter>
-    </ClCompile>
-    <ClCompile Include="StateMachine.cpp">
-      <Filter>Engine\StateMachine</Filter>
-    </ClCompile>
-    <ClCompile Include="PlantAction.cpp">
-      <Filter>Game\PlantStateMachine</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="PlantCondition.cpp">
-      <Filter>Game\PlantStateMachine</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Behaviour.inl">
-      <Filter>Engine\StateMachine</Filter>
+    <ClCompile Include="DummyEntity.cpp">
+      <Filter>Sample</Filter>
+    </ClCompile>
+    <ClCompile Include="SampleScene.cpp">
+      <Filter>Sample</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -75,41 +45,14 @@
     <ClInclude Include="Debug.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Plant.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Zombie.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Action.h">
-      <Filter>Engine\StateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="Behaviour.h">
-      <Filter>Engine\StateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="Condition.h">
-      <Filter>Engine\StateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="Transition.h">
-      <Filter>Engine\StateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="StateMachine.h">
-      <Filter>Engine\StateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="PlantAction.h">
-      <Filter>Game\PlantStateMachine</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="PlantCondition.h">
-      <Filter>Game\PlantStateMachine</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DummyEntity.h">
+      <Filter>Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="SampleScene.h">
+      <Filter>Sample</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -118,15 +61,6 @@
     </None>
     <None Include="GameManager.inl">
       <Filter>Engine</Filter>
-    </None>
-    <None Include="Condition.inl">
-      <Filter>Engine\StateMachine</Filter>
-    </None>
-    <None Include="Entity.inl">
-      <Filter>Engine\StateMachine</Filter>
-    </None>
-    <None Include="Transition.inl">
-      <Filter>Engine\StateMachine</Filter>
     </None>
   </ItemGroup>
 </Project>
