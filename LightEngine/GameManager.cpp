@@ -132,6 +132,13 @@ void GameManager::Update()
 	}
 
     mEntitiesToDestroy.clear();
+
+	for (auto it = mEntitiesToAdd.begin(); it != mEntitiesToAdd.end(); ++it)
+	{
+		mEntities.push_back(*it);
+	}
+
+	mEntitiesToAdd.clear();
 }
 
 void GameManager::Draw()
