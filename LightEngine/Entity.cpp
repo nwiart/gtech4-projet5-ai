@@ -92,6 +92,14 @@ void Entity::GoToPosition(float x, float y, float speed)
 	mTarget.isSet = true;
 }
 
+void Entity::SetDirection(float x, float y, float speed)
+{
+	if (speed > 0)
+		mSpeed = speed;
+
+	mDirection = sf::Vector2f(x, y);
+}
+
 void Entity::Update()
 {
 	OnUpdate();
