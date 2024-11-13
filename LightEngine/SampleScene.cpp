@@ -47,7 +47,7 @@ void SampleScene::Update()
 {
 	if(pEntitySelected != nullptr)
 	{
-		sf::Vector2f position = pEntitySelected->GetPosition(0.5f, 0.5f);
+		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
 }
