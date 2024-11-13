@@ -1,6 +1,5 @@
 #include "SampleScene.h"
 
-#include "Zombie.h"
 #include "DummyEntity.h"
 
 #include "Debug.h"
