@@ -83,13 +83,13 @@ void GameManager::HandleInput()
 			mpWindow->close();
 		}
 
-		mpScene->HandleInput(event);
+		mpScene->OnEvent(event);
 	}
 }
 
 void GameManager::Update()
 {
-	mpScene->Update();
+	mpScene->OnUpdate();
 
     //Update
     for (auto it = mEntities.begin(); it != mEntities.end(); )

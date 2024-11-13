@@ -67,7 +67,7 @@ sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 	return position;
 }
 
-bool Entity::GoToDirection(float x, float y, float speed)
+bool Entity::GoToDirection(int x, int y, float speed)
 {
 	if(speed > 0)
 		mSpeed = speed;
@@ -84,14 +84,14 @@ bool Entity::GoToDirection(float x, float y, float speed)
 	return true;
 }
 
-bool Entity::GoToPosition(float x, float y, float speed)
+bool Entity::GoToPosition(int x, int y, float speed)
 {
 	if (GoToDirection(x, y, speed) == false)
 		return false;
 
 	sf::Vector2f position = GetPosition(0.5f, 0.5f);
 
-	mTarget.position = sf::Vector2f(x, y);
+	mTarget.position = { x, y };
 	mTarget.distance = Utils::GetDistance(position.x, position.y, x, y);
 	mTarget.isSet = true;
 
@@ -108,9 +108,7 @@ void Entity::SetDirection(float x, float y, float speed)
 
 void Entity::Update()
 {
-	OnUpdate();
-
-	float dt = GameManager::Get()->GetDeltaTime();
+	float dt = GetDeltaTime();
 	float distance = dt * mSpeed;
 	sf::Vector2f translation = distance * mDirection;
 	mShape.move(translation);
@@ -126,9 +124,16 @@ void Entity::Update()
 			mTarget.isSet = false;
 		}
 	}
+
+	OnUpdate();
 }
 
 Scene* Entity::GetScene() const
 {
 	return GameManager::Get()->GetScene();
+}
+
+float Entity::GetDeltaTime() const
+{
+	return GameManager::Get()->GetDeltaTime();
 }

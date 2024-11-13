@@ -15,9 +15,9 @@ private:
 	void TrySetSelectedEntity(DummyEntity* pEntity, int x, int y);
 
 public:
-	void Initialize() override;
-	void HandleInput(const sf::Event& event) override;
-	void Update() override;
+	void OnInitialize() override;
+	void OnEvent(const sf::Event& event) override;
+	void OnUpdate() override;
 };
 
 

@@ -4,7 +4,7 @@
 
 #include "Debug.h"
 
-void SampleScene::Initialize()
+void SampleScene::OnInitialize()
 {
 	pEntity1 = CreateEntity<DummyEntity>(100, sf::Color::Red);
 	pEntity1->SetPosition(100, 100);
@@ -15,7 +15,7 @@ void SampleScene::Initialize()
 	pEntitySelected = nullptr;
 }
 
-void SampleScene::HandleInput(const sf::Event& event)
+void SampleScene::OnEvent(const sf::Event& event)
 {
 	if (event.type != sf::Event::EventType::MouseButtonPressed)
 		return;
@@ -43,7 +43,7 @@ void SampleScene::TrySetSelectedEntity(DummyEntity* pEntity, int x, int y)
 	pEntitySelected = pEntity;
 }
 
-void SampleScene::Update()
+void SampleScene::OnUpdate()
 {
 	if(pEntitySelected != nullptr)
 	{

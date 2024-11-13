@@ -62,5 +62,8 @@
     <None Include="GameManager.inl">
       <Filter>Engine</Filter>
     </None>
+    <None Include="Entity.inl">
+      <Filter>Engine</Filter>
+    </None>
   </ItemGroup>
 </Project>
