@@ -12,11 +12,11 @@ private:
 
 private:
 	void SetGameManager(GameManager* pGameManager) { mpGameManager = pGameManager; }
-	virtual void Initialize() = 0;
-
+	
 protected:
 	Scene() = default;
 
+	virtual void Initialize() = 0;
 	virtual void HandleInput(const sf::Event& event) = 0;
 	virtual void Update() = 0;
 
