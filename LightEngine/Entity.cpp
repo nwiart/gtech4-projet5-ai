@@ -86,7 +86,7 @@ bool Entity::GoToDirection(float x, float y, float speed)
 
 bool Entity::GoToPosition(float x, float y, float speed)
 {
-	if (GoToDirection(x, y, speed))
+	if (GoToDirection(x, y, speed) == false)
 		return false;
 
 	sf::Vector2f position = GetPosition(0.5f, 0.5f);
