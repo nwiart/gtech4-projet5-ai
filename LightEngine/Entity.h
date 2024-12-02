@@ -57,16 +57,19 @@ public:
     T* CreateEntity(float radius, const sf::Color& color);
 
 protected:
-    virtual ~Entity() {};
-    Entity(float radius, const sf::Color& color);
+    Entity() = default;
+    ~Entity() = default;
 
     virtual void OnUpdate() {};
     virtual void OnCollision(Entity* collidedWith) {};
+	virtual void OnInitialize() {};
 	
 private:
     void Update();
+	void Initialize(float radius, const sf::Color& color);
 
     friend class GameManager;
+    friend Scene;
 };
 
 #include "Entity.inl"

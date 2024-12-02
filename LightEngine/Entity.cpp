@@ -6,7 +6,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 
-Entity::Entity(float radius, const sf::Color& color)
+void Entity::Initialize(float radius, const sf::Color& color)
 {
 	mDirection = sf::Vector2f(0.0f, 0.0f);
 	mSpeed = 0.0f;
@@ -16,7 +16,7 @@ Entity::Entity(float radius, const sf::Color& color)
 	mShape.setOrigin(0.f, 0.f);
 	mShape.setRadius(radius);
 	mShape.setFillColor(color);
-
+	
 	mTarget.isSet = false;
 }
 
