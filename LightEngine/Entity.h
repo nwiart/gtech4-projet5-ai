@@ -44,7 +44,7 @@ public:
     bool IsColliding(Entity* other) const;
 	bool IsInside(float x, float y) const;
 
-	void Destroy() { mToDestroy = true; }
+    void Destroy();
 	bool ToDestroy() const { return mToDestroy; }
 	
 	template<typename T>
@@ -62,8 +62,9 @@ protected:
 
     virtual void OnUpdate() {};
     virtual void OnCollision(Entity* collidedWith) {};
-	virtual void OnInitialize() {};
-	
+     void OnInitialize() {};
+    virtual void OnDestroy() {};
+
 private:
     void Update();
 	void Initialize(float radius, const sf::Color& color);

@@ -18,6 +18,8 @@ void Entity::Initialize(float radius, const sf::Color& color)
 	mShape.setFillColor(color);
 	
 	mTarget.isSet = false;
+
+	OnInitialize();
 }
 
 bool Entity::IsColliding(Entity* other) const
@@ -44,6 +46,13 @@ bool Entity::IsInside(float x, float y) const
 	float radius = mShape.getRadius();
 
 	return (dx * dx + dy * dy) < (radius * radius);
+}
+
+void Entity::Destroy()
+{
+	mToDestroy = true;
+
+	OnDestroy();
 }
 
 void Entity::SetPosition(float x, float y, float ratioX, float ratioY)
