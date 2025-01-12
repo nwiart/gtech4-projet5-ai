@@ -27,6 +27,7 @@ protected:
     float mSpeed = 0.f;
     bool mToDestroy = false;
     int mTag = -1;
+	bool mRigidBody = false;
 
 public:
 	bool GoToDirection(int x, int y, float speed = -1.f);
@@ -36,6 +37,8 @@ public:
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetTag(int tag) { mTag = tag; }
 	float GetRadius() const { return mShape.getRadius(); }
+	void SetRigidBody(bool isRigitBody) { mRigidBody = isRigitBody; }
+	bool IsRigidBody() const { return mRigidBody; }
 
     sf::Vector2f GetPosition(float ratioX = 0.5f, float ratioY = 0.5f) const;
 	sf::Shape* GetShape() { return &mShape; }

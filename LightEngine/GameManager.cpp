@@ -122,7 +122,8 @@ void GameManager::Update()
 
             if (entity->IsColliding(otherEntity))
             {
-				entity->Repulse(otherEntity);
+				if (entity->IsRigidBody() && otherEntity->IsRigidBody())
+					entity->Repulse(otherEntity);
 
                 entity->OnCollision(otherEntity);
                 otherEntity->OnCollision(entity);
