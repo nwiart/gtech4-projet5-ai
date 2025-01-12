@@ -68,6 +68,7 @@ protected:
 private:
     void Update();
 	void Initialize(float radius, const sf::Color& color);
+	void Repulse(Entity* other);
 
     friend class GameManager;
     friend Scene;
