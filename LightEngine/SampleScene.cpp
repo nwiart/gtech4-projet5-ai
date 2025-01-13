@@ -84,9 +84,18 @@ void SampleScene::ResetPlayers()
 
 void SampleScene::OnUpdate()
 {
-	if(pEntitySelected != nullptr)
+	if (pEntitySelected != nullptr)
 	{
 		sf::Vector2f position = pEntitySelected->GetPosition();
 		Debug::DrawCircle(position.x, position.y, 10, sf::Color::Blue);
 	}
+
+	// Goal delimiters.
+	int xPos = GetWindowWidth() / 10;
+	Debug::DrawLine(xPos, 0, xPos, GetWindowHeight(), sf::Color::White);
+	xPos = GetWindowWidth() - xPos;
+	Debug::DrawLine(xPos, 0, xPos, GetWindowHeight(), sf::Color::White);
+
+	// Score.
+	Debug::DrawText(10, 10, "Score: 0 - 0", sf::Color::White);
 }
