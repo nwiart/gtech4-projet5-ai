@@ -6,45 +6,34 @@
 class StateAction {
 public:
     virtual ~StateAction() = default;
-    virtual void start() = 0;
-    virtual void update(float deltaTime) = 0;
+    virtual void start(Player& player, Ball& ball) = 0;
+    virtual void update(Player& player, Ball& ball, float deltaTime) = 0;
 };
 
-class IdleState : public StateAction {
+class PossessionState : public StateAction {
 public:
-    void start() override;
-    void update(float deltaTime) override;
-};
+    void start(Player& player, Ball& ball) override;
+    void update(Player& player, Ball& ball, float deltaTime) override;
 
-class ShootingState : public StateAction {
 private:
-    int& mAmmo;
-    float& mShootProgress;
-    float mShootTime;
-    std::function<void()> mOnComplete;
-
-public:
-    ShootingState(int& ammo, float& shootProgress, float shootTime, std::function<void()> onComplete);
-    void start() override;
-    void update(float deltaTime) override;
+    void avoidDefenders(Player& player, float deltaTime);
 };
 
-class ReloadingState : public StateAction {
+class TeammateState : public StateAction {
+public:
+    void start(Player& player, Ball& ball) override;
+    void update(Player& player, Ball& ball, float deltaTime) override;
+
 private:
-    int& mAmmo;
-    int mCapacity;
-    float& mReloadProgress;
-    float mReloadTime;
-    std::function<void()> mOnComplete;
-
-public:
-    ReloadingState(int& ammo, int capacity, float& reloadProgress, float reloadTime, std::function<void()> onComplete);
-    void start() override;
-    void update(float deltaTime) override;
+    void findOpenSpace(Player& player, Ball& ball, float deltaTime);
 };
 
-class EmptyState : public StateAction {
+class OpponentState : public StateAction {
 public:
-    void start() override;
-    void update(float deltaTime) override;
+    void start(Player& player, Ball& ball) override;
+    void update(Player& player, Ball& ball, float deltaTime) override;
+
+private:
+    void positionStrategically(Player& player, Ball& ball, float deltaTime);
+    void markPlayers(Player& player, float deltaTime);
 };

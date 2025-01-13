@@ -28,6 +28,7 @@
     <ClCompile Include="PlayerEntity.cpp" />
     <ClCompile Include="SampleScene.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="StateAction.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +40,7 @@
     <ClInclude Include="PlayerEntity.h" />
     <ClInclude Include="SampleScene.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="StateAction.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
