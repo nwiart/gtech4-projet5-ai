@@ -3,37 +3,40 @@
 #include <iostream>
 #include <functional>
 
+class PlayerEntity;
+class BallEntity;
+
 class StateAction {
 public:
     virtual ~StateAction() = default;
-    virtual void start(Player& player, Ball& ball) = 0;
-    virtual void update(Player& player, Ball& ball, float deltaTime) = 0;
+    virtual void start(PlayerEntity& player, BallEntity& ball) = 0;
+    virtual void update(PlayerEntity& player, BallEntity& ball, float deltaTime) = 0;
 };
 
 class PossessionState : public StateAction {
 public:
-    void start(Player& player, Ball& ball) override;
-    void update(Player& player, Ball& ball, float deltaTime) override;
+    void start(PlayerEntity& player, BallEntity& ball) override;
+    void update(PlayerEntity& player, BallEntity& ball, float deltaTime) override;
 
 private:
-    void avoidDefenders(Player& player, float deltaTime);
+    void avoidDefenders(PlayerEntity& player, float deltaTime);
 };
 
 class TeammateState : public StateAction {
 public:
-    void start(Player& player, Ball& ball) override;
-    void update(Player& player, Ball& ball, float deltaTime) override;
+    void start(PlayerEntity& player, BallEntity& ball) override;
+    void update(PlayerEntity& player, BallEntity& ball, float deltaTime) override;
 
 private:
-    void findOpenSpace(Player& player, Ball& ball, float deltaTime);
+    void findOpenSpace(PlayerEntity& player, BallEntity& ball, float deltaTime);
 };
 
 class OpponentState : public StateAction {
 public:
-    void start(Player& player, Ball& ball) override;
-    void update(Player& player, Ball& ball, float deltaTime) override;
+    void start(PlayerEntity& player, BallEntity& ball) override;
+    void update(PlayerEntity& player, BallEntity& ball, float deltaTime) override;
 
 private:
-    void positionStrategically(Player& player, Ball& ball, float deltaTime);
-    void markPlayers(Player& player, float deltaTime);
+    void positionStrategically(PlayerEntity& player, BallEntity& ball, float deltaTime);
+    void markPlayers(PlayerEntity& player, float deltaTime);
 };

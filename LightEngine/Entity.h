@@ -35,6 +35,7 @@ public:
     void SetPosition(float x, float y, float ratioX = 0.5f, float ratioY = 0.5f);
 	void SetDirection(float x, float y, float speed = -1.f);
 	void SetSpeed(float speed) { mSpeed = speed; }
+	float GetSpeed() { return mSpeed; }
 	void SetTag(int tag) { mTag = tag; }
 	float GetRadius() const { return mShape.getRadius(); }
 	void SetRigidBody(bool isRigitBody) { mRigidBody = isRigitBody; }
