@@ -4,6 +4,8 @@
 
 class PlayerEntity : public Entity
 {
+    friend class SampleScene;
+
 public:
     bool IsMarked() const { return mIsMarked; };
     void SetIsMarked(bool isMarked) { mIsMarked = isMarked; };

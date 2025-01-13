@@ -58,6 +58,19 @@ void SampleScene::CreatePlayersAndBall()
 		pPlayersTeam2[i] = p1;
 	}
 
+	// Set teammates & opponents.
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			pPlayersTeam1[i]->mOpponents.push_back(pPlayersTeam2[j]);
+			pPlayersTeam2[i]->mOpponents.push_back(pPlayersTeam1[j]);
+
+			if (i != j) {
+				pPlayersTeam1[i]->mTeammates.push_back(pPlayersTeam1[j]);
+				pPlayersTeam2[i]->mTeammates.push_back(pPlayersTeam2[j]);
+			}
+		}
+	}
+
 	pBall = CreateEntity<BallEntity>(ballRadius, sf::Color(255, 200, 0));
 	pBall->SetPosition(400, 200);
 }
