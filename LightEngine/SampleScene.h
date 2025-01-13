@@ -2,14 +2,14 @@
 
 #include "Scene.h"
 
+class PlayerEntity;
+class BallEntity;
+
 class DummyEntity;
 
 class SampleScene : public Scene
 {
-	DummyEntity* pEntity1;
-	DummyEntity* pEntity2;
-
-	DummyEntity* pEntitySelected;
+	Entity* pEntitySelected;
 
 private:
 	void TrySetSelectedEntity(DummyEntity* pEntity, int x, int y);

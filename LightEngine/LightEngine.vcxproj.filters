@@ -31,6 +31,12 @@
     <ClCompile Include="SampleScene.cpp">
       <Filter>Sample</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerEntity.cpp">
+      <Filter>Sample</Filter>
+    </ClCompile>
+    <ClCompile Include="BallEntity.cpp">
+      <Filter>Sample</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -52,6 +58,12 @@
       <Filter>Sample</Filter>
     </ClInclude>
     <ClInclude Include="SampleScene.h">
+      <Filter>Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerEntity.h">
+      <Filter>Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="BallEntity.h">
       <Filter>Sample</Filter>
     </ClInclude>
   </ItemGroup>
