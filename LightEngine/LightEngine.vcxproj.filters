@@ -31,6 +31,9 @@
     <ClCompile Include="SampleScene.cpp">
       <Filter>Sample</Filter>
     </ClCompile>
+    <ClCompile Include="StateAction.cpp">
+      <Filter>Sample</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -52,6 +55,9 @@
       <Filter>Sample</Filter>
     </ClInclude>
     <ClInclude Include="SampleScene.h">
+      <Filter>Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="StateAction.h">
       <Filter>Sample</Filter>
     </ClInclude>
   </ItemGroup>
