@@ -28,7 +28,12 @@ void SampleScene::OnEvent(const sf::Event& event)
 
 	if (event.mouseButton.button == sf::Mouse::Button::Left)
 	{
-		if (pEntitySelected != nullptr) 
+		if (pBall && pBall->IsInside(event.mouseButton.x, event.mouseButton.y))
+		{
+			float angle = rand() / (float)RAND_MAX * 2*3.14F;
+			pBall->SetDirection(cos(angle), sin(angle), 240.0F);
+		}
+		else if (pEntitySelected != nullptr)
 		{
 			pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
 		}

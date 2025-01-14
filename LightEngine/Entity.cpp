@@ -106,6 +106,11 @@ sf::Vector2f Entity::GetPosition(float ratioX, float ratioY) const
 	return position;
 }
 
+sf::Vector2f Entity::GetDirection() const
+{
+	return mDirection;
+}
+
 bool Entity::GoToDirection(int x, int y, float speed)
 {
 	sf::Vector2f position = GetPosition(0.5f, 0.5f);
