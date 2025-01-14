@@ -140,12 +140,12 @@ void SampleScene::OnUpdate()
     if (ballPos.x <= goalLineTeam1 && pBallHolder && pBallHolder->GetTeam() == 2)
     {
         std::cout << "But pour l'equipe 2 !" << std::endl;
-        ResetGame(2);
+        ResetGame(1);
     }
     else if (ballPos.x >= goalLineTeam2 && pBallHolder && pBallHolder->GetTeam() == 1)
     {
         std::cout << "But pour l'equipe 1 !" << std::endl;
-        ResetGame(1);
+        ResetGame(2);
     }
 }
 void SampleScene::ResetGame(int teamWithBall)
