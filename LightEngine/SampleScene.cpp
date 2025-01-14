@@ -2,7 +2,7 @@
 #include "PlayerEntity.h"
 #include "BallEntity.h"
 #include "Debug.h"
-#include <random> // Pour le choix al�atoire
+#include <random>
 
 void SampleScene::OnInitialize()
 {
@@ -30,7 +30,6 @@ void SampleScene::CreatePlayersAndBall()
     const float playerRadius = 34.0F;
     const float ballRadius = 20.0F;
 
-    // Cr�ation des joueurs
     for (int i = 0; i < 5; i++)
     {
         PlayerEntity *p0 = CreateEntity<PlayerEntity>(playerRadius, sf::Color::Green);
@@ -47,12 +46,10 @@ void SampleScene::CreatePlayersAndBall()
         p0->SetSpeed(100.f);
         pPlayersTeam2[i] = p1;
 
-        // D�bogage : confirmation des joueurs
-        std::cout << "Joueur " << p0->GetId() << " de l'�quipe 1 cr��." << std::endl;
-        std::cout << "Joueur " << p1->GetId() << " de l'�quipe 2 cr��." << std::endl;
+        std::cout << "Joueur " << p0->GetId() << " de l'equipe 1 cree." << std::endl;
+        std::cout << "Joueur " << p1->GetId() << " de l'equipe 2 cree." << std::endl;
     }
 
-    // D�finition des co�quipiers et adversaires
     for (int i = 0; i < 5; i++)
     {
         for (int j = 0; j < 5; j++)
@@ -68,23 +65,20 @@ void SampleScene::CreatePlayersAndBall()
         }
     }
 
-    // Cr�ation du ballon
     pBall = CreateEntity<BallEntity>(ballRadius, sf::Color(255, 200, 0));
 
-    // Choix al�atoire pour attribuer la balle
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(0, 4);
 
-    int ballHolderIndex = dist(gen); // Index al�atoire entre 0 et 4
+    int ballHolderIndex = dist(gen);
     pPlayersTeam1[ballHolderIndex]->SetHasBall(true);
     pPlayersTeam1[ballHolderIndex]->SetCurrentState(new PossessionState());
     pBall->SetPosition(pPlayersTeam1[ballHolderIndex]->GetPosition().x, pPlayersTeam1[ballHolderIndex]->GetPosition().y);
 
-    std::cout << "Initialisation termin�e : Joueur " << ballHolderIndex
-              << " de l'�quipe 1 commence avec la balle." << std::endl;
+    std::cout << "Initialisation terminee : Joueur " << ballHolderIndex
+              << " de l'equipe 1 commence avec la balle." << std::endl;
 
-    // Les autres joueurs de l'�quipe 1 soutiennent le porteur de balle
     for (int i = 0; i < 5; i++)
     {
         if (i != ballHolderIndex)
@@ -93,7 +87,6 @@ void SampleScene::CreatePlayersAndBall()
         }
     }
 
-    // Tous les joueurs de l'�quipe 2 tentent d'intercepter
     for (int i = 0; i < 5; i++)
     {
         pPlayersTeam2[i]->SetCurrentState(new OpponentState());
@@ -140,7 +133,6 @@ void SampleScene::OnUpdate()
         }
     }
 
-    // Mise � jour des joueurs de l'�quipe 1
     for (int i = 0; i < 5; ++i)
     {
         if (pPlayersTeam1[i]->GetCurrentState())
@@ -149,7 +141,6 @@ void SampleScene::OnUpdate()
         }
     }
 
-    // Mise � jour des joueurs de l'�quipe 2
     for (int i = 0; i < 5; ++i)
     {
         if (pPlayersTeam2[i]->GetCurrentState())
@@ -158,7 +149,6 @@ void SampleScene::OnUpdate()
         }
     }
 
-    // V�rification des buts
     int goalLineTeam1 = GetWindowWidth() / 10;
     Debug::DrawLine(goalLineTeam1, 0, goalLineTeam1, GetWindowHeight(), sf::Color::White);
     int goalLineTeam2 = GetWindowWidth() - goalLineTeam1;
@@ -167,36 +157,31 @@ void SampleScene::OnUpdate()
 
     if (ballPos.x <= goalLineTeam1)
     {
-        std::cout << "But pour l'�quipe 2 !" << std::endl;
+        std::cout << "But pour l'equipe 2 !" << std::endl;
         ResetGame(2);
     }
     else if (ballPos.x >= goalLineTeam2)
     {
-        std::cout << "But pour l'�quipe 1 !" << std::endl;
+        std::cout << "But pour l'equipe 1 !" << std::endl;
         ResetGame(1);
     }
 }
 void SampleScene::ResetGame(int teamWithBall)
 {
-    // R�initialise les positions des joueurs
     ResetPlayers();
 
-    // Choix al�atoire pour attribuer la balle
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(0, 4);
 
-    // �quipe qui doit recevoir la balle
     if (teamWithBall == 1)
     {
-        // R�initialisation de l'�quipe 2
         for (int i = 0; i < 5; ++i)
         {
             pPlayersTeam2[i]->SetHasBall(false);
             pPlayersTeam2[i]->SetCurrentState(new OpponentState());
         }
 
-        // Attribue la balle � un joueur al�atoire de l'�quipe 1
         int ballHolderIndex = dist(gen);
         for (int i = 0; i < 5; ++i)
         {
@@ -215,14 +200,12 @@ void SampleScene::ResetGame(int teamWithBall)
     }
     else if (teamWithBall == 2)
     {
-        // R�initialisation de l'�quipe 1
         for (int i = 0; i < 5; ++i)
         {
             pPlayersTeam1[i]->SetHasBall(false);
             pPlayersTeam1[i]->SetCurrentState(new OpponentState());
         }
 
-        // Attribue la balle � un joueur al�atoire de l'�quipe 2
         int ballHolderIndex = dist(gen);
         for (int i = 0; i < 5; ++i)
         {
@@ -240,24 +223,23 @@ void SampleScene::ResetGame(int teamWithBall)
         }
     }
 
-    // D�bogage : Afficher l'�tat des joueurs apr�s r�initialisation
-    std::cout << "�tat des joueurs apr�s r�initialisation :" << std::endl;
+    std::cout << "etat des joueurs apres reinitialisation :" << std::endl;
 
-    std::cout << "�quipe 1 :" << std::endl;
+    std::cout << "equipe 1 :" << std::endl;
     for (int i = 0; i < 5; ++i)
     {
         std::cout << "Joueur " << pPlayersTeam1[i]->GetId()
-                  << " - �tat : " << (pPlayersTeam1[i]->HasBall() ? "Possession" : "Adversaire") << std::endl;
+                  << " - etat : " << (pPlayersTeam1[i]->HasBall() ? "Possession" : "Adversaire") << std::endl;
     }
 
-    std::cout << "�quipe 2 :" << std::endl;
+    std::cout << "equipe 2 :" << std::endl;
     for (int i = 0; i < 5; ++i)
     {
         std::cout << "Joueur " << pPlayersTeam2[i]->GetId()
-                  << " - �tat : " << (pPlayersTeam2[i]->HasBall() ? "Possession" : "Soutien") << std::endl;
+                  << " - etat : " << (pPlayersTeam2[i]->HasBall() ? "Possession" : "Soutien") << std::endl;
     }
 
     sf::Vector2f ballPos = pBall->GetPosition();
     std::cout << "Position de la balle : (" << ballPos.x << ", " << ballPos.y << ")" << std::endl;
-    std::cout << "Le jeu a �t� r�initialis�. L'�quipe " << teamWithBall << " commence avec la balle." << std::endl;
+    std::cout << "Le jeu a ete reinitialis�. L'equipe " << teamWithBall << " commence avec la balle." << std::endl;
 }
