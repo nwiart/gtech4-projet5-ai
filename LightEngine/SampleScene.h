@@ -32,4 +32,8 @@ public:
 	PlayerEntity* GetBallHolder() const { return pBallHolder; }
 
 	void SetBallHolder(PlayerEntity* p) { pBallHolder = p; }
+
+private:
+	int scoreTeam1 = 0;
+	int scoreTeam2 = 0;
 };

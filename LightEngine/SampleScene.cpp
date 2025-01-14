@@ -140,13 +140,17 @@ void SampleScene::OnUpdate()
     if (ballPos.x <= goalLineTeam1 && pBallHolder && pBallHolder->GetTeam() == 2)
     {
         std::cout << "But pour l'equipe 2 !" << std::endl;
+        scoreTeam2++;
         ResetGame(1);
     }
     else if (ballPos.x >= goalLineTeam2 && pBallHolder && pBallHolder->GetTeam() == 1)
     {
         std::cout << "But pour l'equipe 1 !" << std::endl;
+        scoreTeam1++;
         ResetGame(2);
     }
+
+    Debug::DrawText(10, 10, "Equipe 1: " + std::to_string(scoreTeam1) + " | Equipe 2: " + std::to_string(scoreTeam2), sf::Color::White);
 }
 void SampleScene::ResetGame(int teamWithBall)
 {
@@ -225,5 +229,5 @@ void SampleScene::ResetGame(int teamWithBall)
 
     sf::Vector2f ballPos = pBall->GetPosition();
     std::cout << "Position de la balle : (" << ballPos.x << ", " << ballPos.y << ")" << std::endl;
-    std::cout << "Le jeu a ete reinitialis�. L'equipe " << teamWithBall << " commence avec la balle." << std::endl;
+    std::cout << "Le jeu a ete reinitialise. L'equipe " << teamWithBall << " commence avec la balle." << std::endl;
 }
