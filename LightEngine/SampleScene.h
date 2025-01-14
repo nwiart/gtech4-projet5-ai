@@ -20,11 +20,13 @@ private:
 
 	void CreatePlayersAndBall();
 	void ResetPlayers();
+	void ResetGame(int teamWithBall);
 
 public:
 	void OnInitialize() override;
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;
+	BallEntity* GetBall() const { return pBall; }
 };
 
 
