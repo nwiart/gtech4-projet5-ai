@@ -51,14 +51,12 @@ void SampleScene::CreatePlayersAndBall()
         p0->SetRigidBody(true);
         p0->SetId(i);
         p0->SetTeam(1);
-        p0->SetSpeed(100.f);
         pPlayersTeam1[i] = p0;
 
         PlayerEntity *p1 = CreateEntity<PlayerEntity>(playerRadius, sf::Color::Red);
         p1->SetRigidBody(true);
         p1->SetId(i + 5);
         p1->SetTeam(2);
-        p1->SetSpeed(100.f);
         pPlayersTeam2[i] = p1;
 
         std::cout << "Joueur " << p0->GetId() << " de l'equipe 1 cree." << std::endl;

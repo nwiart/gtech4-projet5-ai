@@ -37,11 +37,7 @@ void PossessionState::update(PlayerEntity& player, BallEntity& ball, float delta
     sf::Vector2f direction = calculateDirection(playerPos, goalPos);
 
     // Déplace le joueur vers les buts
-    player.SetDirection(direction.x, direction.y, player.GetSpeed());
-    player.SetPosition(
-        playerPos.x + direction.x * player.GetSpeed() * deltaTime,
-        playerPos.y + direction.y * player.GetSpeed() * deltaTime
-    );
+    player.SetDirection(direction.x, direction.y, 200.0F);
 
     // Synchronise la position de la balle avec le joueur
     //ball.SetPosition(player.GetPosition().x, player.GetPosition().y);
