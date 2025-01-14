@@ -7,7 +7,7 @@
 void SampleScene::OnInitialize()
 {
     CreatePlayersAndBall();
-    ResetPlayers();
+    ResetGame(1);
     pEntitySelected = nullptr;
 }
 
@@ -16,6 +16,21 @@ void SampleScene::OnEvent(const sf::Event &event)
     if (event.type != sf::Event::EventType::MouseButtonPressed)
         return;
 
+    // Drop ball on right click.
+    if (event.mouseButton.button == sf::Mouse::Button::Right)
+    {
+        float angle = rand() / (float) RAND_MAX * 2.0F*3.14F;
+        float vx = cos(angle), vy = sin(angle);
+        pBall->SetDirection(vx, vy, 200.0F);
+
+        sf::Vector2f pos = pBall->GetPosition();
+        pBall->SetPosition(pos.x + vx * 60.0F, pos.y + vy * 60.0F);
+
+        if (pBallHolder) {
+            pBallHolder->SetHasBall(false);
+            pBallHolder = 0;
+        }
+    }
     if (event.mouseButton.button == sf::Mouse::Button::Left)
     {
         if (pEntitySelected != nullptr)
@@ -44,7 +59,7 @@ void SampleScene::CreatePlayersAndBall()
         p1->SetRigidBody(true);
         p1->SetId(i + 5);
         p1->SetTeam(2);
-        p0->SetSpeed(100.f);
+        p1->SetSpeed(100.f);
         pPlayersTeam2[i] = p1;
 
         // D�bogage : confirmation des joueurs
@@ -70,34 +85,6 @@ void SampleScene::CreatePlayersAndBall()
 
     // Cr�ation du ballon
     pBall = CreateEntity<BallEntity>(ballRadius, sf::Color(255, 200, 0));
-
-    // Choix al�atoire pour attribuer la balle
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(0, 4);
-
-    int ballHolderIndex = dist(gen); // Index al�atoire entre 0 et 4
-    pPlayersTeam1[ballHolderIndex]->SetHasBall(true);
-    pPlayersTeam1[ballHolderIndex]->SetCurrentState(new PossessionState());
-    pBall->SetPosition(pPlayersTeam1[ballHolderIndex]->GetPosition().x, pPlayersTeam1[ballHolderIndex]->GetPosition().y);
-
-    std::cout << "Initialisation termin�e : Joueur " << ballHolderIndex
-              << " de l'�quipe 1 commence avec la balle." << std::endl;
-
-    // Les autres joueurs de l'�quipe 1 soutiennent le porteur de balle
-    for (int i = 0; i < 5; i++)
-    {
-        if (i != ballHolderIndex)
-        {
-            pPlayersTeam1[i]->SetCurrentState(new TeammateState());
-        }
-    }
-
-    // Tous les joueurs de l'�quipe 2 tentent d'intercepter
-    for (int i = 0; i < 5; i++)
-    {
-        pPlayersTeam2[i]->SetCurrentState(new OpponentState());
-    }
 }
 
 void SampleScene::ResetPlayers()
@@ -119,6 +106,8 @@ void SampleScene::ResetPlayers()
         pPlayersTeam1[i]->SetPosition(pos[i][0], pos[i][1]);
         pPlayersTeam2[i]->SetPosition(GetWindowWidth() - pos[i][0], pos[i][1]);
     }
+
+    pBallHolder = 0;
 }
 
 void SampleScene::OnUpdate()
@@ -126,18 +115,10 @@ void SampleScene::OnUpdate()
     float deltaTime = GetDeltaTime();
 
     // Synchronise la position de la balle avec le porteur
-    for (int i = 0; i < 5; ++i)
+    if (pBallHolder)
     {
-        if (pPlayersTeam1[i]->HasBall())
-        {
-            pBall->SetPosition(pPlayersTeam1[i]->GetPosition().x, pPlayersTeam1[i]->GetPosition().y);
-            break;
-        }
-        if (pPlayersTeam2[i]->HasBall())
-        {
-            pBall->SetPosition(pPlayersTeam2[i]->GetPosition().x, pPlayersTeam2[i]->GetPosition().y);
-            break;
-        }
+        pBall->SetSpeed(0.0F);
+        pBall->SetPosition(pBallHolder->GetPosition().x, pBallHolder->GetPosition().y);
     }
 
     // Mise � jour des joueurs de l'�quipe 1
@@ -165,12 +146,12 @@ void SampleScene::OnUpdate()
     Debug::DrawLine(goalLineTeam2, 0, goalLineTeam2, GetWindowHeight(), sf::Color::White);
     sf::Vector2f ballPos = pBall->GetPosition();
 
-    if (ballPos.x <= goalLineTeam1)
+    if (ballPos.x <= goalLineTeam1 && pBallHolder && pBallHolder->GetTeam() == 2)
     {
         std::cout << "But pour l'�quipe 2 !" << std::endl;
         ResetGame(2);
     }
-    else if (ballPos.x >= goalLineTeam2)
+    else if (ballPos.x >= goalLineTeam2 && pBallHolder && pBallHolder->GetTeam() == 1)
     {
         std::cout << "But pour l'�quipe 1 !" << std::endl;
         ResetGame(1);
@@ -204,6 +185,7 @@ void SampleScene::ResetGame(int teamWithBall)
             {
                 pPlayersTeam1[i]->SetHasBall(true);
                 pPlayersTeam1[i]->SetCurrentState(new PossessionState());
+                pBallHolder = pPlayersTeam1[i];
                 pBall->SetPosition(pPlayersTeam1[i]->GetPosition().x, pPlayersTeam1[i]->GetPosition().y);
             }
             else
@@ -230,6 +212,7 @@ void SampleScene::ResetGame(int teamWithBall)
             {
                 pPlayersTeam2[i]->SetHasBall(true);
                 pPlayersTeam2[i]->SetCurrentState(new PossessionState());
+                pBallHolder = pPlayersTeam2[i];
                 pBall->SetPosition(pPlayersTeam2[i]->GetPosition().x, pPlayersTeam2[i]->GetPosition().y);
             }
             else

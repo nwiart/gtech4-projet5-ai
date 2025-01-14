@@ -15,6 +15,8 @@ class SampleScene : public Scene
 	PlayerEntity* pPlayersTeam2[5];
 	BallEntity* pBall;
 
+	PlayerEntity* pBallHolder;
+
 private:
 	void TrySetSelectedEntity(DummyEntity* pEntity, int x, int y);
 
@@ -27,6 +29,7 @@ public:
 	void OnEvent(const sf::Event& event) override;
 	void OnUpdate() override;
 	BallEntity* GetBall() const { return pBall; }
+	PlayerEntity* GetBallHolder() const { return pBallHolder; }
+
+	void SetBallHolder(PlayerEntity* p) { pBallHolder = p; }
 };
-
-

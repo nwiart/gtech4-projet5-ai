@@ -44,7 +44,7 @@ void PossessionState::update(PlayerEntity& player, BallEntity& ball, float delta
     );
 
     // Synchronise la position de la balle avec le joueur
-    ball.SetPosition(player.GetPosition().x, player.GetPosition().y);
+    //ball.SetPosition(player.GetPosition().x, player.GetPosition().y);
 
     std::cout << "Le joueur avec l'ID " << player.GetId() << " avance vers les buts adverses." << std::endl;
 }

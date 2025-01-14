@@ -26,6 +26,8 @@ void PlayerEntity::OnCollision(Entity* collidedWith) {
             std::cout << "Un joueur récupère la balle." << std::endl;
             SetHasBall(true);
             SetCurrentState(new PossessionState());
+
+            GetScene<SampleScene>()->SetBallHolder(this);
         }
     }
 }
