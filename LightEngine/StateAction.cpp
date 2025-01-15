@@ -69,14 +69,17 @@ void PossessionState::passToTeammate(PlayerEntity& player, BallEntity& ball)
     {
         if (!teammate->IsMarked())
         {
-            float distance = calculateDistance(player.GetPosition().x, player.GetPosition().y, teammate->GetPosition().x, teammate->GetPosition().y);
+            float distance = calculateDistance(
+                player.GetPosition().x, player.GetPosition().y,
+                teammate->GetPosition().x, teammate->GetPosition().y);
 
             if (distance < PASS_DISTANCE)
             {
-                sf::Vector2f passDirection = calculateDirection(player.GetPosition(), teammate->GetPosition());
-                ball.SetDirection(passDirection.x, passDirection.y, 300.0f);
+                sf::Vector2f targetPosition = teammate->GetPosition();
+                ball.MoveTo(targetPosition, 300.0f); // Déplace la balle vers le coéquipier
 
-                player.GetScene<SampleScene>()->SetBallHolder(teammate);
+                // Désactiver temporairement le RigidBody de la balle pour éviter les collisions
+                ball.DisableRigidBodyTemporarily(1.0f); // Désactiver pendant 1 seconde
 
                 return;
             }

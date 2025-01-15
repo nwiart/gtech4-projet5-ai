@@ -5,6 +5,45 @@
 
 void BallEntity::OnUpdate()
 {
+	float deltaTime = GetDeltaTime();
+
+	if (rigidBodyDisabled)
+	{
+		rigidBodyDisableTimer -= deltaTime;
+		if (rigidBodyDisableTimer <= 0.0f)
+		{
+			rigidBodyDisabled = false;
+			this->SetRigidBody(true);
+		}
+	}
+
+	if (isMoving)
+	{
+		sf::Vector2f currentPosition = GetPosition();
+		sf::Vector2f direction = targetPosition - currentPosition;
+		float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+
+		if (distance > 0.1f)
+		{
+			direction /= distance;
+			sf::Vector2f velocity = direction * movementSpeed * GetDeltaTime();
+			if (std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y) >= distance)
+			{
+				SetPosition(targetPosition.x, targetPosition.y);
+				isMoving = false;
+			}
+			else
+			{
+				SetPosition(currentPosition.x + velocity.x, currentPosition.y + velocity.y);
+			}
+		}
+		else
+		{
+			SetPosition(targetPosition.x, targetPosition.y);
+			isMoving = false;
+		}
+	}
+
 	CollideWithBoundaries();
 
 	SetSpeed(GetSpeed() * 0.98F);
@@ -12,6 +51,8 @@ void BallEntity::OnUpdate()
 
 void BallEntity::OnCollision(Entity* other)
 {
+	if (rigidBodyDisabled)
+		return;
 	PlayerEntity* player = dynamic_cast<PlayerEntity*>(other);
 	if (!player) return;
 
@@ -42,4 +83,28 @@ void BallEntity::CollideWithBoundaries()
 		}
 		SetDirection(dir.x, dir.y);
 	}
+}
+
+void BallEntity::MoveTo(sf::Vector2f target, float speed)
+{
+	targetPosition = target;
+	movementSpeed = speed;
+	isMoving = true;
+}
+
+bool BallEntity::IsMoving() const
+{
+	return isMoving;
+}
+
+void BallEntity::SetIgnoreCollision(Entity* entity)
+{
+	ignoredEntity = entity;
+}
+
+void BallEntity::DisableRigidBodyTemporarily(float duration)
+{
+	rigidBodyDisabled = true;
+	rigidBodyDisableTimer = duration;
+	this->SetRigidBody(false);
 }

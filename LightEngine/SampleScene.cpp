@@ -108,27 +108,33 @@ void SampleScene::ResetPlayers()
     pBallHolder = 0;
 }
 
-void SampleScene::OnUpdate() {
+void SampleScene::OnUpdate()
+{
     float deltaTime = GetDeltaTime();
 
-    if (pBallHolder) {
-        pBall->SetSpeed(0.0F);
-        pBall->SetPosition(pBallHolder->GetPosition().x, pBallHolder->GetPosition().y);
-    }
+    if (!pBallHolder)
+    {
+        pBall->OnUpdate();
 
-    for (int i = 0; i < 5; ++i) {
-        for (int j = 0; j < 5; ++j) {
-            if (pPlayersTeam1[i]->GetTeam() != pPlayersTeam2[j]->GetTeam()) {
-                float distance = calculateDistance(
-                    pPlayersTeam1[i]->GetPosition().x, pPlayersTeam1[i]->GetPosition().y,
-                    pPlayersTeam2[j]->GetPosition().x, pPlayersTeam2[j]->GetPosition().y);
-
-                if (distance < INTERCEPT_DISTANCE) {
-                    pPlayersTeam1[i]->OnCollision(pPlayersTeam2[j]);
-                    pPlayersTeam2[j]->OnCollision(pPlayersTeam1[i]);
-                }
+        for (int i = 0; i < 5; i++)
+        {
+            if (calculateDistance(pPlayersTeam1[i]->GetPosition().x, pPlayersTeam1[i]->GetPosition().y,
+                pBall->GetPosition().x, pBall->GetPosition().y) < INTERCEPT_DISTANCE)
+            {
+                SetBallHolder(pPlayersTeam1[i]);
+                break;
+            }
+            if (calculateDistance(pPlayersTeam2[i]->GetPosition().x, pPlayersTeam2[i]->GetPosition().y,
+                pBall->GetPosition().x, pBall->GetPosition().y) < INTERCEPT_DISTANCE)
+            {
+                SetBallHolder(pPlayersTeam2[i]);
+                break;
             }
         }
+    }
+    else
+    {
+        pBall->SetPosition(pBallHolder->GetPosition().x, pBallHolder->GetPosition().y);
     }
 
     CheckForGoal();
