@@ -40,8 +40,6 @@ void PossessionState::update(PlayerEntity& player, BallEntity&, float deltaTime)
     sf::Vector2f direction = calculateDirection(playerPos, goalPos);
     player.SetDirection(direction.x, direction.y, 200.0f);
 
-    std::cout << "Le joueur " << player.GetId() << " se dirige vers les buts adverses." << std::endl;
-
     constexpr float THREAT_DISTANCE = 200.0f;
     bool threatDetected = false;
 
@@ -55,14 +53,8 @@ void PossessionState::update(PlayerEntity& player, BallEntity&, float deltaTime)
                 opponent->GetPosition().x, opponent->GetPosition().y
             );
 
-            std::cout << "Distance entre le joueur " << player.GetId()
-                << " et l'adversaire " << opponent->GetId() << " : "
-                << distanceToOpponent << std::endl;
-
             if (distanceToOpponent < THREAT_DISTANCE)
             {
-                std::cout << "Adversaire detecte a proximite (ID : " << opponent->GetId()
-                    << ", distance : " << distanceToOpponent << "). Tentative de passe..." << std::endl;
                 passToTeammate(player, *ball);
                 threatDetected = true;
                 break;
@@ -91,8 +83,6 @@ void PossessionState::passToTeammate(PlayerEntity& player, BallEntity& ball)
 
                 player.GetScene<SampleScene>()->SetBallHolder(teammate);
 
-                std::cout << "Passe effectuee par le joueur " << player.GetId()
-                    << " au joueur " << teammate->GetId() << "." << std::endl;
                 return;
             }
         }
@@ -100,7 +90,7 @@ void PossessionState::passToTeammate(PlayerEntity& player, BallEntity& ball)
 }
 
 // ----------------------------------------------------
-// TeammateState (Co�quipier sans la balle)
+// TeammateState (Coequipier sans la balle)
 // ----------------------------------------------------
 
 void TeammateState::start(PlayerEntity &player, BallEntity &)
