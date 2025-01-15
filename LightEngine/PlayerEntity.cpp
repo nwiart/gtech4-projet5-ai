@@ -54,6 +54,7 @@ void PlayerEntity::OnUpdate() {
         mInvincibilityTime -= GetScene<SampleScene>()->GetDeltaTime();
         if (mInvincibilityTime <= 0.0f) {
             mIsInvincible = false;
+            this->SetRigidBody(true);
             std::cout << "Le joueur " << GetId() << " n'est plus invincible." << std::endl;
         }
     }
@@ -96,6 +97,7 @@ void PlayerEntity::OnCollision(Entity* collidedWith) {
 void PlayerEntity::SetInvincibility(float duration) {
     mIsInvincible = true;
     mInvincibilityTime = duration;
+    this->SetRigidBody(false);
     std::cout << "Le joueur " << GetId() << " est invincible pour " << duration << " secondes." << std::endl;
 }
 
