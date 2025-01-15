@@ -32,7 +32,7 @@ public:
 	void OnUpdate() override;
 	BallEntity* GetBall() const { return pBall; }
 	PlayerEntity* GetBallHolder() const { return pBallHolder; }
-	void SetBallHolder(PlayerEntity* p) { pBallHolder = p; }
+	void SetBallHolder(PlayerEntity* p);
 
 	float GetBallInterceptTime() const { return mBallInterceptTime; }
 

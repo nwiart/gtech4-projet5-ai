@@ -138,6 +138,13 @@ void SampleScene::OnUpdate() {
     CheckForGoal();
 }
 
+void SampleScene::SetBallHolder(PlayerEntity* p)
+{
+    pBallHolder = p;
+    p->SetInvincibility(2.0f);
+    p->ApplySpeedBoost(1.5f, 3.0f);
+}
+
 
 void SampleScene::CheckForGoal()
 {

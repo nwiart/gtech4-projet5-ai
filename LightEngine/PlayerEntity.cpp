@@ -90,9 +90,6 @@ void PlayerEntity::OnCollision(Entity* collidedWith) {
             std::cout << "Le joueur " << GetId() << " a pris la balle au joueur " << otherPlayer->GetId() << "." << std::endl;
 
             scene->SetBallHolder(this);
-
-            SetInvincibility(2.0f);
-            ApplySpeedBoost(1.5f, 3.0f);
         }
     }
 }

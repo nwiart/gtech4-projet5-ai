@@ -6,7 +6,7 @@
 
 namespace
 {
-    constexpr float PASS_DISTANCE = 10.0f;
+    constexpr float PASS_DISTANCE = 150.0f;
     constexpr float INTERCEPT_DISTANCE = 5.0f;
 
     float calculateDistance(float x1, float y1, float x2, float y2)
@@ -31,7 +31,7 @@ void PossessionState::start(PlayerEntity &player, BallEntity &)
     std::cout << "Le joueur " << player.GetId() << " a pris possession de la balle." << std::endl;
 }
 
-void PossessionState::update(PlayerEntity& player, BallEntity& ball, float deltaTime)
+void PossessionState::update(PlayerEntity& player, BallEntity&, float deltaTime)
 {
     sf::Vector2f playerPos = player.GetPosition();
     float goalX = (player.GetTeam() == 1) ? player.GetScene()->GetWindowWidth() - 50.0f : 50.0f;
@@ -45,24 +45,28 @@ void PossessionState::update(PlayerEntity& player, BallEntity& ball, float delta
     constexpr float THREAT_DISTANCE = 200.0f;
     bool threatDetected = false;
 
-    for (PlayerEntity* opponent : player.GetOpponents())
-    {
-        float distanceToOpponent = calculateDistance(
-            playerPos.x, playerPos.y,
-            opponent->GetPosition().x, opponent->GetPosition().y
-        );
+    BallEntity* ball = player.GetScene<SampleScene>()->GetBall();
 
-        std::cout << "Distance entre le joueur " << player.GetId()
-            << " et l'adversaire " << opponent->GetId() << " : "
-            << distanceToOpponent << std::endl;
-
-        if (distanceToOpponent < THREAT_DISTANCE)
+    if (!player.IsInvincible()) {
+        for (PlayerEntity* opponent : player.GetOpponents())
         {
-            std::cout << "Adversaire detecte a proximite (ID : " << opponent->GetId()
-                << ", distance : " << distanceToOpponent << "). Tentative de passe..." << std::endl;
-            passToTeammate(player, ball);
-            threatDetected = true;
-            break;
+            float distanceToOpponent = calculateDistance(
+                playerPos.x, playerPos.y,
+                opponent->GetPosition().x, opponent->GetPosition().y
+            );
+
+            std::cout << "Distance entre le joueur " << player.GetId()
+                << " et l'adversaire " << opponent->GetId() << " : "
+                << distanceToOpponent << std::endl;
+
+            if (distanceToOpponent < THREAT_DISTANCE)
+            {
+                std::cout << "Adversaire detecte a proximite (ID : " << opponent->GetId()
+                    << ", distance : " << distanceToOpponent << "). Tentative de passe..." << std::endl;
+                passToTeammate(player, *ball);
+                threatDetected = true;
+                break;
+            }
         }
     }
 
@@ -78,8 +82,7 @@ void PossessionState::passToTeammate(PlayerEntity& player, BallEntity& ball)
     {
         if (!teammate->IsMarked())
         {
-            float distance = calculateDistance(player.GetPosition().x, player.GetPosition().y,
-                teammate->GetPosition().x, teammate->GetPosition().y);
+            float distance = calculateDistance(player.GetPosition().x, player.GetPosition().y, teammate->GetPosition().x, teammate->GetPosition().y);
 
             if (distance < PASS_DISTANCE)
             {
