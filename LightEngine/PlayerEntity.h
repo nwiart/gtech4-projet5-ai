@@ -18,16 +18,13 @@ public:
     bool IsMarked() const { return mIsMarked; }
     void SetIsMarked(bool isMarked) { mIsMarked = isMarked; }
 
-    bool HasBall() const { return mHasBall; }
-    void SetHasBall(bool hasBall) { mHasBall = hasBall; }
+    bool HasBall() const;
 
     const std::vector<PlayerEntity*>& GetTeammates() const { return mTeammates; }
     void SetTeammates(const std::vector<PlayerEntity*>& teammates) { mTeammates = teammates; }
     const std::vector<PlayerEntity*>& GetOpponents() const { return mOpponents; }
     void SetOpponents(const std::vector<PlayerEntity*>& opponents) { mOpponents = opponents; }
 
-    StateAction* GetCurrentState() const { return mCurrentState; }
-    void SetCurrentState(StateAction* newState);
     StateMachine& GetStateMachine() { return mStateMachine; }
 
     void OnCollision(Entity* collidedWith);
@@ -42,9 +39,8 @@ private:
     int mTeam;
 
     bool mIsMarked = false;
-    bool mHasBall = false;
     std::vector<PlayerEntity*> mTeammates;
     std::vector<PlayerEntity*> mOpponents;
-    StateAction* mCurrentState = nullptr;
+
     StateMachine mStateMachine;
 };

@@ -28,7 +28,6 @@ void SampleScene::OnEvent(const sf::Event &event)
         pBall->SetPosition(pos.x + vx * 60.0F, pos.y + vy * 60.0F);
 
         if (pBallHolder) {
-            pBallHolder->SetHasBall(false);
             pBallHolder = 0;
         }
     }
@@ -149,7 +148,6 @@ void SampleScene::ResetGame(int teamWithBall)
     {
         for (int i = 0; i < 5; ++i)
         {
-            pPlayersTeam2[i]->SetHasBall(false);
             pPlayersTeam2[i]->GetStateMachine().Start(pPlayersTeam2[i], 1);
         }
 
@@ -158,14 +156,12 @@ void SampleScene::ResetGame(int teamWithBall)
         {
             if (i == ballHolderIndex)
             {
-                pPlayersTeam1[i]->SetHasBall(true);
                 pPlayersTeam1[i]->GetStateMachine().Start(pPlayersTeam1[i], 2);
                 pBallHolder = pPlayersTeam1[i];
                 pBall->SetPosition(pPlayersTeam1[i]->GetPosition().x, pPlayersTeam1[i]->GetPosition().y);
             }
             else
             {
-                pPlayersTeam1[i]->SetHasBall(false);
                 pPlayersTeam1[i]->GetStateMachine().Start(pPlayersTeam1[i], 0);
             }
         }
@@ -174,7 +170,6 @@ void SampleScene::ResetGame(int teamWithBall)
     {
         for (int i = 0; i < 5; ++i)
         {
-            pPlayersTeam1[i]->SetHasBall(false);
             pPlayersTeam1[i]->GetStateMachine().Start(pPlayersTeam2[i], 1);
         }
 
@@ -183,14 +178,12 @@ void SampleScene::ResetGame(int teamWithBall)
         {
             if (i == ballHolderIndex)
             {
-                pPlayersTeam2[i]->SetHasBall(true);
                 pPlayersTeam2[i]->GetStateMachine().Start(pPlayersTeam2[i], 2);
                 pBallHolder = pPlayersTeam2[i];
                 pBall->SetPosition(pPlayersTeam2[i]->GetPosition().x, pPlayersTeam2[i]->GetPosition().y);
             }
             else
             {
-                pPlayersTeam2[i]->SetHasBall(false);
                 pPlayersTeam2[i]->GetStateMachine().Start(pPlayersTeam2[i], 0);
             }
         }
