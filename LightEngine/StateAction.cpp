@@ -3,6 +3,8 @@
 #include "BallEntity.h"
 #include <cmath>
 
+#include "SampleScene.h"
+
 namespace {
     constexpr float MARK_DISTANCE = 10.0f;
     constexpr float AVOID_DISTANCE = 5.0f;
@@ -64,17 +66,21 @@ void TeammateState::start(PlayerEntity& player, BallEntity&) {
     std::cout << "Le coéquipier soutient le porteur de balle." << std::endl;
 }
 
-void TeammateState::update(PlayerEntity& player, BallEntity& ball, float deltaTime) {
-    PlayerEntity* ballHolder = nullptr;
-    for (PlayerEntity* teammate : player.GetTeammates()) {
-        if (teammate->HasBall()) {
-            ballHolder = teammate;
-            break;
-        }
-    }
+void TeammateState::update(PlayerEntity& player, BallEntity& ball, float deltaTime){
+    PlayerEntity* ballHolder = player.GetScene<SampleScene>()->GetBallHolder();
 
     if (ballHolder) {
-        findOpenSpace(player, ball, deltaTime);
+        const float distanceBehind = 70.0F;
+        float goalDirection = player.GetTeam() == 1 ? 1.0F : -1.0F;
+        //findOpenSpace(player, ball, deltaTime);
+        float xBehind = ballHolder->GetPosition().x - distanceBehind * goalDirection;
+        if ((xBehind - player.GetPosition().x) * goalDirection > 0.0F) {
+            player.SetDirection(goalDirection, 0.0F, 200.0F);
+        }
+
+        if (ballHolder->GetTeam() != player.GetTeam()) {
+            player.SetCurrentState(new OpponentState());
+        }
     }
 }
 
@@ -92,17 +98,18 @@ void OpponentState::start(PlayerEntity& player, BallEntity&) {
 }
 
 void OpponentState::update(PlayerEntity& player, BallEntity& ball, float deltaTime) {
-    PlayerEntity* ballHolder = nullptr;
-    for (PlayerEntity* opponent : player.GetOpponents()) {
-        if (opponent->HasBall()) {
-            ballHolder = opponent;
-            break;
-        }
-    }
+    PlayerEntity* ballHolder = player.GetScene<SampleScene>()->GetBallHolder();
 
     if (ballHolder) {
-        positionStrategically(player, ball, deltaTime);
-        markPlayers(player, deltaTime);
+        //positionStrategically(player, ball, deltaTime);
+        //markPlayers(player, deltaTime);
+
+        sf::Vector2f dir = calculateDirection(player.GetPosition(), ballHolder->GetPosition());
+        player.SetDirection(dir.x, dir.y, 200.0F);
+
+        if (ballHolder->GetTeam() == player.GetTeam()) {
+            player.SetCurrentState(new TeammateState());
+        }
     }
 }
 

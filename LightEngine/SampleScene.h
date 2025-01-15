@@ -30,10 +30,13 @@ public:
 	void OnUpdate() override;
 	BallEntity* GetBall() const { return pBall; }
 	PlayerEntity* GetBallHolder() const { return pBallHolder; }
-
 	void SetBallHolder(PlayerEntity* p) { pBallHolder = p; }
+
+	float GetBallInterceptTime() const { return mBallInterceptTime; }
 
 private:
 	int scoreTeam1 = 0;
 	int scoreTeam2 = 0;
+
+	float mBallInterceptTime;
 };
