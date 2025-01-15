@@ -19,7 +19,8 @@ public:
     void update(PlayerEntity& player, BallEntity& ball, float deltaTime) override;
 
 private:
-    void avoidDefenders(PlayerEntity& player, float deltaTime);
+    //void avoidDefenders(PlayerEntity& player, float deltaTime);
+    //void passToTeammate(PlayerEntity& player, BallEntity& ball);
 };
 
 class TeammateState : public StateAction {
@@ -28,7 +29,7 @@ public:
     void update(PlayerEntity& player, BallEntity& ball, float deltaTime) override;
 
 private:
-    void findOpenSpace(PlayerEntity& player, BallEntity& ball, float deltaTime);
+    //void findOpenSpace(PlayerEntity& player, BallEntity& ball, float deltaTime);
 };
 
 class OpponentState : public StateAction {
@@ -37,6 +38,6 @@ public:
     void update(PlayerEntity& player, BallEntity& ball, float deltaTime) override;
 
 private:
-    void positionStrategically(PlayerEntity& player, BallEntity& ball, float deltaTime);
-    void markPlayers(PlayerEntity& player, float deltaTime);
+    //void positionStrategically(PlayerEntity& player, BallEntity& ball, float deltaTime);
+    //void markPlayers(PlayerEntity& player, float deltaTime);
 };

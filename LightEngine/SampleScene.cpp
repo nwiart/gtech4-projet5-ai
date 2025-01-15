@@ -5,6 +5,13 @@
 #include <random>
 #include <iostream>
 
+constexpr float INTERCEPT_DISTANCE = 70.0f;
+
+float calculateDistance(float x1, float y1, float x2, float y2)
+{
+    return std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
 void SampleScene::OnInitialize()
 {
     CreatePlayersAndBall();
@@ -20,14 +27,15 @@ void SampleScene::OnEvent(const sf::Event &event)
     // Drop ball on right click.
     if (event.mouseButton.button == sf::Mouse::Button::Right)
     {
-        float angle = rand() / (float) RAND_MAX * 2.0F*3.14F;
+        float angle = rand() / (float)RAND_MAX * 2.0F * 3.14F;
         float vx = cos(angle), vy = sin(angle);
         pBall->SetDirection(vx, vy, 200.0F);
 
         sf::Vector2f pos = pBall->GetPosition();
         pBall->SetPosition(pos.x + vx * 60.0F, pos.y + vy * 60.0F);
 
-        if (pBallHolder) {
+        if (pBallHolder)
+        {
             pBallHolder = 0;
         }
     }
@@ -104,17 +112,37 @@ void SampleScene::ResetPlayers()
     pBallHolder = 0;
 }
 
-void SampleScene::OnUpdate()
-{
+void SampleScene::OnUpdate() {
     float deltaTime = GetDeltaTime();
 
-    // Synchronise la position de la balle avec le porteur
-    if (pBallHolder)
-    {
+    if (pBallHolder) {
         pBall->SetSpeed(0.0F);
         pBall->SetPosition(pBallHolder->GetPosition().x, pBallHolder->GetPosition().y);
     }
 
+    for (int i = 0; i < 5; ++i) {
+        for (int j = 0; j < 5; ++j) {
+            if (pPlayersTeam1[i]->GetTeam() != pPlayersTeam2[j]->GetTeam()) {
+                float distance = calculateDistance(
+                    pPlayersTeam1[i]->GetPosition().x, pPlayersTeam1[i]->GetPosition().y,
+                    pPlayersTeam2[j]->GetPosition().x, pPlayersTeam2[j]->GetPosition().y);
+
+                if (distance < INTERCEPT_DISTANCE) {
+                    std::cout << "Collision detectee entre Joueur " << pPlayersTeam1[i]->GetId()
+                        << " et Joueur " << pPlayersTeam2[j]->GetId() << " !" << std::endl;
+                    pPlayersTeam1[i]->OnCollision(pPlayersTeam2[j]);
+                    pPlayersTeam2[j]->OnCollision(pPlayersTeam1[i]);
+                }
+            }
+        }
+    }
+
+    CheckForGoal();
+}
+
+
+void SampleScene::CheckForGoal()
+{
     int goalLineTeam1 = GetWindowWidth() / 10;
     Debug::DrawLine(goalLineTeam1, 0, goalLineTeam1, GetWindowHeight(), sf::Color::White);
     int goalLineTeam2 = GetWindowWidth() - goalLineTeam1;
@@ -136,6 +164,7 @@ void SampleScene::OnUpdate()
 
     Debug::DrawText(10, 10, "Equipe 1: " + std::to_string(scoreTeam1) + " | Equipe 2: " + std::to_string(scoreTeam2), sf::Color::White);
 }
+
 void SampleScene::ResetGame(int teamWithBall)
 {
     ResetPlayers();

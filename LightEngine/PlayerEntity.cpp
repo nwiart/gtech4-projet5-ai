@@ -47,9 +47,24 @@ PlayerEntity::PlayerEntity()
     });
 }
 
-void PlayerEntity::OnUpdate()
-{
+void PlayerEntity::OnUpdate() {
     mStateMachine.Update(this);
+
+    if (mIsInvincible) {
+        mInvincibilityTime -= GetScene<SampleScene>()->GetDeltaTime();
+        if (mInvincibilityTime <= 0.0f) {
+            mIsInvincible = false;
+            std::cout << "Le joueur " << GetId() << " n'est plus invincible." << std::endl;
+        }
+    }
+
+    if (mSpeedBoostTime > 0.0f) {
+        mSpeedBoostTime -= GetScene<SampleScene>()->GetDeltaTime();
+        if (mSpeedBoostTime <= 0.0f) {
+            mSpeedBoost = 1.0f;
+            std::cout << "Le boost de vitesse du joueur " << GetId() << " est terminé." << std::endl;
+        }
+    }
 }
 
 bool PlayerEntity::HasBall() const
@@ -57,13 +72,43 @@ bool PlayerEntity::HasBall() const
     return GetScene<SampleScene>()->GetBallHolder() == this;
 }
 
-// Gestion des collisions avec le ballon
 void PlayerEntity::OnCollision(Entity* collidedWith) {
-    if (dynamic_cast<BallEntity*>(collidedWith)) {
-        if (!HasBall()) {
-            std::cout << "Un joueur récupère la balle." << std::endl;
+    if (mIsInvincible) {
+        std::cout << "Collision ignoree car le joueur " << GetId() << " est invincible." << std::endl;
+        return;
+    }
 
-            GetScene<SampleScene>()->SetBallHolder(this);
+    PlayerEntity* otherPlayer = dynamic_cast<PlayerEntity*>(collidedWith);
+    if (otherPlayer) {
+        SampleScene* scene = GetScene<SampleScene>();
+        if (scene->GetBallHolder() == otherPlayer && otherPlayer->GetTeam() != GetTeam()) {
+            std::cout << "Le joueur " << GetId() << " a pris la balle au joueur " << otherPlayer->GetId() << "." << std::endl;
+
+            scene->SetBallHolder(this);
+
+            SetInvincibility(2.0f);
+            ApplySpeedBoost(1.5f, 3.0f);
         }
     }
 }
+
+
+void PlayerEntity::SetInvincibility(float duration) {
+    mIsInvincible = true;
+    mInvincibilityTime = duration;
+    std::cout << "Le joueur " << GetId() << " est invincible pour " << duration << " secondes." << std::endl;
+}
+
+void PlayerEntity::ApplySpeedBoost(float boostMultiplier, float duration) {
+    mSpeedBoost = boostMultiplier;
+    mSpeedBoostTime = duration;
+    std::cout << "Le joueur " << GetId() << " a un boost de vitesse (" << boostMultiplier
+        << "x) pour " << duration << " secondes." << std::endl;
+}
+
+
+void PlayerEntity::GoToPosition(float x, float y, float baseSpeed) {
+    float boostedSpeed = baseSpeed * mSpeedBoost;
+    SetDirection((x - GetPosition().x), (y - GetPosition().y), boostedSpeed);
+}
+

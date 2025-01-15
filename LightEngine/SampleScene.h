@@ -24,6 +24,8 @@ private:
 	void ResetPlayers();
 	void ResetGame(int teamWithBall);
 
+	void CheckForGoal();
+
 public:
 	void OnInitialize() override;
 	void OnEvent(const sf::Event& event) override;

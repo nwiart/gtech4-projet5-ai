@@ -34,6 +34,12 @@ public:
     void SetTeam(int team) { mTeam = team; }
     int GetTeam() const { return mTeam; }
 
+    void SetInvincibility(float duration);
+    bool IsInvincible() const { return mIsInvincible; }
+    void ApplySpeedBoost(float boostMultiplier, float duration);
+    void GoToPosition(float x, float y, float baseSpeed);
+
+
 private:
     int mId;
     int mTeam;
@@ -43,4 +49,9 @@ private:
     std::vector<PlayerEntity*> mOpponents;
 
     StateMachine mStateMachine;
+
+    bool mIsInvincible = false;
+    float mSpeedBoost = 1.0f;
+    float mInvincibilityTime = 0.0f;
+    float mSpeedBoostTime = 0.0f;
 };
