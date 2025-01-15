@@ -1,10 +1,9 @@
 #pragma once
 
 #include "Entity.h"
-#include "BallEntity.h"
-#include "StateAction.h"
+#include "StateMachine.h"
+
 #include <vector>
-#include <iostream>
 
 class SampleScene;
 
@@ -12,6 +11,10 @@ class PlayerEntity : public Entity {
     friend class SampleScene;
 
 public:
+    PlayerEntity();
+
+    virtual void OnUpdate() override;
+
     bool IsMarked() const { return mIsMarked; }
     void SetIsMarked(bool isMarked) { mIsMarked = isMarked; }
 
@@ -25,6 +28,7 @@ public:
 
     StateAction* GetCurrentState() const { return mCurrentState; }
     void SetCurrentState(StateAction* newState);
+    StateMachine& GetStateMachine() { return mStateMachine; }
 
     void OnCollision(Entity* collidedWith);
 
@@ -42,4 +46,5 @@ private:
     std::vector<PlayerEntity*> mTeammates;
     std::vector<PlayerEntity*> mOpponents;
     StateAction* mCurrentState = nullptr;
+    StateMachine mStateMachine;
 };

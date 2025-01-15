@@ -29,6 +29,7 @@
     <ClCompile Include="SampleScene.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="StateAction.cpp" />
+    <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +42,7 @@
     <ClInclude Include="SampleScene.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="StateAction.h" />
+    <ClInclude Include="StateMachine.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>

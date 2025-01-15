@@ -77,9 +77,8 @@ void TeammateState::update(PlayerEntity& player, BallEntity& ball, float deltaTi
         if ((xBehind - player.GetPosition().x) * goalDirection > 0.0F) {
             player.SetDirection(goalDirection, 0.0F, 200.0F);
         }
-
-        if (ballHolder->GetTeam() != player.GetTeam()) {
-            player.SetCurrentState(new OpponentState());
+        else {
+            player.SetSpeed(0.0F);
         }
     }
 }
@@ -106,10 +105,6 @@ void OpponentState::update(PlayerEntity& player, BallEntity& ball, float deltaTi
 
         sf::Vector2f dir = calculateDirection(player.GetPosition(), ballHolder->GetPosition());
         player.SetDirection(dir.x, dir.y, 200.0F);
-
-        if (ballHolder->GetTeam() == player.GetTeam()) {
-            player.SetCurrentState(new TeammateState());
-        }
     }
 }
 

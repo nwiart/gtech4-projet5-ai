@@ -40,6 +40,9 @@
     <ClCompile Include="StateAction.cpp">
       <Filter>Sample</Filter>
     </ClCompile>
+    <ClCompile Include="StateMachine.cpp">
+      <Filter>Sample</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h">
@@ -70,6 +73,9 @@
       <Filter>Sample</Filter>
     </ClInclude>
     <ClInclude Include="StateAction.h">
+      <Filter>Sample</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachine.h">
       <Filter>Sample</Filter>
     </ClInclude>
   </ItemGroup>

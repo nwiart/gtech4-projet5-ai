@@ -3,6 +3,7 @@
 #include "BallEntity.h"
 #include "Debug.h"
 #include <random>
+#include <iostream>
 
 void SampleScene::OnInitialize()
 {
@@ -115,22 +116,6 @@ void SampleScene::OnUpdate()
         pBall->SetPosition(pBallHolder->GetPosition().x, pBallHolder->GetPosition().y);
     }
 
-    for (int i = 0; i < 5; ++i)
-    {
-        if (pPlayersTeam1[i]->GetCurrentState())
-        {
-            pPlayersTeam1[i]->GetCurrentState()->update(*pPlayersTeam1[i], *pBall, deltaTime);
-        }
-    }
-
-    for (int i = 0; i < 5; ++i)
-    {
-        if (pPlayersTeam2[i]->GetCurrentState())
-        {
-            pPlayersTeam2[i]->GetCurrentState()->update(*pPlayersTeam2[i], *pBall, deltaTime);
-        }
-    }
-
     int goalLineTeam1 = GetWindowWidth() / 10;
     Debug::DrawLine(goalLineTeam1, 0, goalLineTeam1, GetWindowHeight(), sf::Color::White);
     int goalLineTeam2 = GetWindowWidth() - goalLineTeam1;
@@ -165,7 +150,7 @@ void SampleScene::ResetGame(int teamWithBall)
         for (int i = 0; i < 5; ++i)
         {
             pPlayersTeam2[i]->SetHasBall(false);
-            pPlayersTeam2[i]->SetCurrentState(new OpponentState());
+            pPlayersTeam2[i]->GetStateMachine().Start(pPlayersTeam2[i], 1);
         }
 
         int ballHolderIndex = dist(gen);
@@ -174,14 +159,14 @@ void SampleScene::ResetGame(int teamWithBall)
             if (i == ballHolderIndex)
             {
                 pPlayersTeam1[i]->SetHasBall(true);
-                pPlayersTeam1[i]->SetCurrentState(new PossessionState());
+                pPlayersTeam1[i]->GetStateMachine().Start(pPlayersTeam1[i], 2);
                 pBallHolder = pPlayersTeam1[i];
                 pBall->SetPosition(pPlayersTeam1[i]->GetPosition().x, pPlayersTeam1[i]->GetPosition().y);
             }
             else
             {
                 pPlayersTeam1[i]->SetHasBall(false);
-                pPlayersTeam1[i]->SetCurrentState(new TeammateState());
+                pPlayersTeam1[i]->GetStateMachine().Start(pPlayersTeam1[i], 0);
             }
         }
     }
@@ -190,7 +175,7 @@ void SampleScene::ResetGame(int teamWithBall)
         for (int i = 0; i < 5; ++i)
         {
             pPlayersTeam1[i]->SetHasBall(false);
-            pPlayersTeam1[i]->SetCurrentState(new OpponentState());
+            pPlayersTeam1[i]->GetStateMachine().Start(pPlayersTeam2[i], 1);
         }
 
         int ballHolderIndex = dist(gen);
@@ -199,14 +184,14 @@ void SampleScene::ResetGame(int teamWithBall)
             if (i == ballHolderIndex)
             {
                 pPlayersTeam2[i]->SetHasBall(true);
-                pPlayersTeam2[i]->SetCurrentState(new PossessionState());
+                pPlayersTeam2[i]->GetStateMachine().Start(pPlayersTeam2[i], 2);
                 pBallHolder = pPlayersTeam2[i];
                 pBall->SetPosition(pPlayersTeam2[i]->GetPosition().x, pPlayersTeam2[i]->GetPosition().y);
             }
             else
             {
                 pPlayersTeam2[i]->SetHasBall(false);
-                pPlayersTeam2[i]->SetCurrentState(new TeammateState());
+                pPlayersTeam2[i]->GetStateMachine().Start(pPlayersTeam2[i], 0);
             }
         }
     }
