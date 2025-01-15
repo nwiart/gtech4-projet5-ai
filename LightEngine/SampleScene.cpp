@@ -128,8 +128,6 @@ void SampleScene::OnUpdate() {
                     pPlayersTeam2[j]->GetPosition().x, pPlayersTeam2[j]->GetPosition().y);
 
                 if (distance < INTERCEPT_DISTANCE) {
-                    std::cout << "Collision detectee entre Joueur " << pPlayersTeam1[i]->GetId()
-                        << " et Joueur " << pPlayersTeam2[j]->GetId() << " !" << std::endl;
                     pPlayersTeam1[i]->OnCollision(pPlayersTeam2[j]);
                     pPlayersTeam2[j]->OnCollision(pPlayersTeam1[i]);
                 }

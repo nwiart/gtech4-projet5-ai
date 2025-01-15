@@ -20,7 +20,7 @@ public:
 
 private:
     //void avoidDefenders(PlayerEntity& player, float deltaTime);
-    //void passToTeammate(PlayerEntity& player, BallEntity& ball);
+    void passToTeammate(PlayerEntity& player, BallEntity& ball);
 };
 
 class TeammateState : public StateAction {

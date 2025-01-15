@@ -15,7 +15,7 @@ public:
 
     virtual void OnUpdate() override;
 
-    bool IsMarked() const { return mIsMarked; }
+    bool IsMarked() const;
     void SetIsMarked(bool isMarked) { mIsMarked = isMarked; }
 
     bool HasBall() const;
@@ -37,9 +37,8 @@ public:
     void SetInvincibility(float duration);
     bool IsInvincible() const { return mIsInvincible; }
     void ApplySpeedBoost(float boostMultiplier, float duration);
-    void GoToPosition(float x, float y, float baseSpeed);
 
-
+    void SetDirection(float x, float y, float speed);
 private:
     int mId;
     int mTeam;

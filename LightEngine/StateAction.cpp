@@ -31,50 +31,70 @@ void PossessionState::start(PlayerEntity &player, BallEntity &)
     std::cout << "Le joueur " << player.GetId() << " a pris possession de la balle." << std::endl;
 }
 
-void PossessionState::update(PlayerEntity &player, BallEntity &ball, float deltaTime)
+void PossessionState::update(PlayerEntity& player, BallEntity& ball, float deltaTime)
 {
     sf::Vector2f playerPos = player.GetPosition();
     float goalX = (player.GetTeam() == 1) ? player.GetScene()->GetWindowWidth() - 50.0f : 50.0f;
-    sf::Vector2f goalPos = {goalX, playerPos.y};
+    sf::Vector2f goalPos = { goalX, playerPos.y };
 
-    // Avancer vers les buts adverses
     sf::Vector2f direction = calculateDirection(playerPos, goalPos);
-    player.SetDirection(direction.x, direction.y, 200.f);
+    player.SetDirection(direction.x, direction.y, 200.0f);
 
-    // Tenter une passe si un adversaire est proche
-    for (PlayerEntity *opponent : player.GetOpponents())
+    std::cout << "Le joueur " << player.GetId() << " se dirige vers les buts adverses." << std::endl;
+
+    constexpr float THREAT_DISTANCE = 200.0f;
+    bool threatDetected = false;
+
+    for (PlayerEntity* opponent : player.GetOpponents())
     {
-        float distance = calculateDistance(playerPos.x, playerPos.y, opponent->GetPosition().x, opponent->GetPosition().y);
-        if (distance < PASS_DISTANCE)
+        float distanceToOpponent = calculateDistance(
+            playerPos.x, playerPos.y,
+            opponent->GetPosition().x, opponent->GetPosition().y
+        );
+
+        std::cout << "Distance entre le joueur " << player.GetId()
+            << " et l'adversaire " << opponent->GetId() << " : "
+            << distanceToOpponent << std::endl;
+
+        if (distanceToOpponent < THREAT_DISTANCE)
         {
-            //passToTeammate(player, ball);
+            std::cout << "Adversaire detecte a proximite (ID : " << opponent->GetId()
+                << ", distance : " << distanceToOpponent << "). Tentative de passe..." << std::endl;
+            passToTeammate(player, ball);
+            threatDetected = true;
             break;
         }
     }
+
+    if (!threatDetected)
+    {
+        std::cout << "Aucun adversaire a proximite du joueur " << player.GetId() << ". Pas de passe necessaire." << std::endl;
+    }
 }
 
-//void PossessionState::passToTeammate(PlayerEntity &player, BallEntity &ball)
-//{
-//    for (PlayerEntity *teammate : player.GetTeammates())
-//    {
-//        if (!teammate->IsMarked())
-//        {
-//            float distance = calculateDistance(player.GetPosition().x, player.GetPosition().y,
-//                                               teammate->GetPosition().x, teammate->GetPosition().y);
-//
-//            if (distance < PASS_DISTANCE)
-//            {
-//                sf::Vector2f passDirection = calculateDirection(player.GetPosition(), teammate->GetPosition());
-//                ball.SetDirection(passDirection.x, passDirection.y, 300.0f);
-//                teammate->SetHasBall(true);
-//                player.SetHasBall(false);
-//                std::cout << "Passe effectu�e par le joueur " << player.GetId()
-//                          << " au joueur " << teammate->GetId() << "." << std::endl;
-//                return;
-//            }
-//        }
-//    }
-//}
+void PossessionState::passToTeammate(PlayerEntity& player, BallEntity& ball)
+{
+    for (PlayerEntity* teammate : player.GetTeammates())
+    {
+        if (!teammate->IsMarked())
+        {
+            float distance = calculateDistance(player.GetPosition().x, player.GetPosition().y,
+                teammate->GetPosition().x, teammate->GetPosition().y);
+
+            if (distance < PASS_DISTANCE)
+            {
+                sf::Vector2f passDirection = calculateDirection(player.GetPosition(), teammate->GetPosition());
+                ball.SetDirection(passDirection.x, passDirection.y, 300.0f);
+
+                player.GetScene<SampleScene>()->SetBallHolder(teammate);
+
+                std::cout << "Passe effectuee par le joueur " << player.GetId()
+                    << " au joueur " << teammate->GetId() << "." << std::endl;
+                return;
+            }
+        }
+    }
+}
 
 // ----------------------------------------------------
 // TeammateState (Co�quipier sans la balle)

@@ -1,8 +1,12 @@
 #include "PlayerEntity.h"
 #include "SampleScene.h"
 #include "BallEntity.h"
-
 #include "StateAction.h"
+
+static float calculateDistance(float x1, float y1, float x2, float y2)
+{
+    return std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
 
 PlayerEntity::PlayerEntity()
 {
@@ -93,7 +97,6 @@ void PlayerEntity::OnCollision(Entity* collidedWith) {
     }
 }
 
-
 void PlayerEntity::SetInvincibility(float duration) {
     mIsInvincible = true;
     mInvincibilityTime = duration;
@@ -108,9 +111,32 @@ void PlayerEntity::ApplySpeedBoost(float boostMultiplier, float duration) {
         << "x) pour " << duration << " secondes." << std::endl;
 }
 
+void PlayerEntity::SetDirection(float x, float y, float speed) {
+    mDirection.x = x;
+    mDirection.y = y;
 
-void PlayerEntity::GoToPosition(float x, float y, float baseSpeed) {
-    float boostedSpeed = baseSpeed * mSpeedBoost;
-    SetDirection((x - GetPosition().x), (y - GetPosition().y), boostedSpeed);
+    // Appliquer le SpeedBoost
+    mSpeed = speed * mSpeedBoost;
+    
+    // Normaliser la direction pour éviter un mouvement non uniforme
+    float length = std::sqrt(mDirection.x * mDirection.x + mDirection.y * mDirection.y);
+    if (length > 0.0f) {
+        mDirection /= length;
+    }
+}
+
+bool PlayerEntity::IsMarked() const
+{
+    for (PlayerEntity* opponent : GetOpponents())
+    {
+        float distance = calculateDistance(GetPosition().x, GetPosition().y,
+            opponent->GetPosition().x, opponent->GetPosition().y);
+
+        if (distance < 10.0f)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
