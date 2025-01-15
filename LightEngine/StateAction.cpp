@@ -61,11 +61,6 @@ void PossessionState::update(PlayerEntity& player, BallEntity&, float deltaTime)
             }
         }
     }
-
-    if (!threatDetected)
-    {
-        std::cout << "Aucun adversaire a proximite du joueur " << player.GetId() << ". Pas de passe necessaire." << std::endl;
-    }
 }
 
 void PossessionState::passToTeammate(PlayerEntity& player, BallEntity& ball)

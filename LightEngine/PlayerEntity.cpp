@@ -59,7 +59,6 @@ void PlayerEntity::OnUpdate() {
         if (mInvincibilityTime <= 0.0f) {
             mIsInvincible = false;
             this->SetRigidBody(true);
-            std::cout << "Le joueur " << GetId() << " n'est plus invincible." << std::endl;
         }
     }
 
@@ -67,7 +66,6 @@ void PlayerEntity::OnUpdate() {
         mSpeedBoostTime -= GetScene<SampleScene>()->GetDeltaTime();
         if (mSpeedBoostTime <= 0.0f) {
             mSpeedBoost = 1.0f;
-            std::cout << "Le boost de vitesse du joueur " << GetId() << " est terminé." << std::endl;
         }
     }
 }
@@ -79,7 +77,6 @@ bool PlayerEntity::HasBall() const
 
 void PlayerEntity::OnCollision(Entity* collidedWith) {
     if (mIsInvincible) {
-        std::cout << "Collision ignoree car le joueur " << GetId() << " est invincible." << std::endl;
         return;
     }
 
@@ -87,7 +84,6 @@ void PlayerEntity::OnCollision(Entity* collidedWith) {
     if (otherPlayer) {
         SampleScene* scene = GetScene<SampleScene>();
         if (scene->GetBallHolder() == otherPlayer && otherPlayer->GetTeam() != GetTeam() && !otherPlayer->mIsInvincible) {
-            std::cout << "Le joueur " << GetId() << " a pris la balle au joueur " << otherPlayer->GetId() << "." << std::endl;
 
             scene->SetBallHolder(this);
         }
@@ -98,24 +94,19 @@ void PlayerEntity::SetInvincibility(float duration) {
     mIsInvincible = true;
     mInvincibilityTime = duration;
     this->SetRigidBody(false);
-    std::cout << "Le joueur " << GetId() << " est invincible pour " << duration << " secondes." << std::endl;
 }
 
 void PlayerEntity::ApplySpeedBoost(float boostMultiplier, float duration) {
     mSpeedBoost = boostMultiplier;
     mSpeedBoostTime = duration;
-    std::cout << "Le joueur " << GetId() << " a un boost de vitesse (" << boostMultiplier
-        << "x) pour " << duration << " secondes." << std::endl;
 }
 
 void PlayerEntity::SetDirection(float x, float y, float speed) {
     mDirection.x = x;
     mDirection.y = y;
 
-    // Appliquer le SpeedBoost
     mSpeed = speed * mSpeedBoost;
     
-    // Normaliser la direction pour éviter un mouvement non uniforme
     float length = std::sqrt(mDirection.x * mDirection.x + mDirection.y * mDirection.y);
     if (length > 0.0f) {
         mDirection /= length;

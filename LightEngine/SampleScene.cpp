@@ -66,9 +66,6 @@ void SampleScene::CreatePlayersAndBall()
         p1->SetId(i + 5);
         p1->SetTeam(2);
         pPlayersTeam2[i] = p1;
-
-        std::cout << "Joueur " << p0->GetId() << " de l'equipe 1 cree." << std::endl;
-        std::cout << "Joueur " << p1->GetId() << " de l'equipe 2 cree." << std::endl;
     }
 
     for (int i = 0; i < 5; i++)
@@ -94,7 +91,6 @@ void SampleScene::ResetPlayers()
     const int wy = GetWindowHeight();
     const int hy = GetWindowHeight() / 2;
 
-    // Positionnement des joueurs
     const float pos[5][2] = {
         {80.0F, 80.0F},
         {200.0F, hy - 240.0F},
@@ -156,13 +152,11 @@ void SampleScene::CheckForGoal()
 
     if (ballPos.x <= goalLineTeam1 && pBallHolder && pBallHolder->GetTeam() == 2)
     {
-        std::cout << "But pour l'equipe 2 !" << std::endl;
         scoreTeam2++;
         ResetGame(1);
     }
     else if (ballPos.x >= goalLineTeam2 && pBallHolder && pBallHolder->GetTeam() == 1)
     {
-        std::cout << "But pour l'equipe 1 !" << std::endl;
         scoreTeam1++;
         ResetGame(2);
     }
@@ -222,24 +216,5 @@ void SampleScene::ResetGame(int teamWithBall)
             }
         }
     }
-
-    std::cout << "etat des joueurs apres reinitialisation :" << std::endl;
-
-    std::cout << "equipe 1 :" << std::endl;
-    for (int i = 0; i < 5; ++i)
-    {
-        std::cout << "Joueur " << pPlayersTeam1[i]->GetId()
-                  << " - etat : " << (pPlayersTeam1[i]->HasBall() ? "Possession" : "Adversaire") << std::endl;
-    }
-
-    std::cout << "equipe 2 :" << std::endl;
-    for (int i = 0; i < 5; ++i)
-    {
-        std::cout << "Joueur " << pPlayersTeam2[i]->GetId()
-                  << " - etat : " << (pPlayersTeam2[i]->HasBall() ? "Possession" : "Soutien") << std::endl;
-    }
-
     sf::Vector2f ballPos = pBall->GetPosition();
-    std::cout << "Position de la balle : (" << ballPos.x << ", " << ballPos.y << ")" << std::endl;
-    std::cout << "Le jeu a ete reinitialise. L'equipe " << teamWithBall << " commence avec la balle." << std::endl;
 }
