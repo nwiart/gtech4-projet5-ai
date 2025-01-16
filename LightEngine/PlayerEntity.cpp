@@ -14,16 +14,16 @@ PlayerEntity::PlayerEntity()
     int opponentState = mStateMachine.AddState(new OpponentState());
     int possessState  = mStateMachine.AddState(new PossessionState());
 
-    // Teammate to Opponent : if the ball belongs to the opposite team.
+    // Teammate to Opponent : if the ball belongs to the opposite team OR free.
     mStateMachine.AddTransition(teammateState, opponentState, [](PlayerEntity* player) -> bool {
         PlayerEntity* ballHolder = player->GetScene<SampleScene>()->GetBallHolder();
-        return ballHolder->GetTeam() != player->GetTeam();
+        return !ballHolder || ballHolder->GetTeam() != player->GetTeam();
     });
 
     // Opponent to Teammate : if the ball belongs to our team.
     mStateMachine.AddTransition(opponentState, teammateState, [](PlayerEntity* player) -> bool {
         PlayerEntity* ballHolder = player->GetScene<SampleScene>()->GetBallHolder();
-        return ballHolder->GetTeam() == player->GetTeam();
+        return ballHolder && ballHolder->GetTeam() == player->GetTeam();
     });
 
     // Teammate to Possess : I have the ball.
@@ -41,13 +41,13 @@ PlayerEntity::PlayerEntity()
     // Possess to Teammate : if the ball belongs to our team.
     mStateMachine.AddTransition(possessState, teammateState, [](PlayerEntity* player) -> bool {
         PlayerEntity* ballHolder = player->GetScene<SampleScene>()->GetBallHolder();
-        return ballHolder->GetTeam() == player->GetTeam() && ballHolder != player;
+        return ballHolder && ballHolder->GetTeam() == player->GetTeam() && ballHolder != player;
     });
 
-    // Possess to Opponent : if the ball belongs to the opposite team.
+    // Possess to Opponent : if the ball belongs to the opposite team OR free.
     mStateMachine.AddTransition(possessState, opponentState, [](PlayerEntity* player) -> bool {
         PlayerEntity* ballHolder = player->GetScene<SampleScene>()->GetBallHolder();
-        return ballHolder->GetTeam() != player->GetTeam();
+        return !ballHolder || ballHolder->GetTeam() != player->GetTeam();
     });
 }
 
@@ -80,6 +80,7 @@ void PlayerEntity::OnCollision(Entity* collidedWith) {
         return;
     }
 
+    // Steal ball.
     PlayerEntity* otherPlayer = dynamic_cast<PlayerEntity*>(collidedWith);
     if (otherPlayer) {
         SampleScene* scene = GetScene<SampleScene>();

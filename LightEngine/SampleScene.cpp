@@ -110,32 +110,9 @@ void SampleScene::ResetPlayers()
 
 void SampleScene::OnUpdate()
 {
-    float deltaTime = GetDeltaTime();
-
-    if (!pBallHolder)
-    {
-        pBall->OnUpdate();
-
-        for (int i = 0; i < 5; i++)
-        {
-            if (calculateDistance(pPlayersTeam1[i]->GetPosition().x, pPlayersTeam1[i]->GetPosition().y,
-                pBall->GetPosition().x, pBall->GetPosition().y) < INTERCEPT_DISTANCE)
-            {
-                SetBallHolder(pPlayersTeam1[i]);
-                break;
-            }
-            if (calculateDistance(pPlayersTeam2[i]->GetPosition().x, pPlayersTeam2[i]->GetPosition().y,
-                pBall->GetPosition().x, pBall->GetPosition().y) < INTERCEPT_DISTANCE)
-            {
-                SetBallHolder(pPlayersTeam2[i]);
-                break;
-            }
-        }
-    }
-    else
-    {
+    if (pBallHolder) {
         pBall->SetPosition(pBallHolder->GetPosition().x, pBallHolder->GetPosition().y);
-    }
+        }
 
     CheckForGoal();
 }
@@ -143,8 +120,10 @@ void SampleScene::OnUpdate()
 void SampleScene::SetBallHolder(PlayerEntity* p)
 {
     pBallHolder = p;
-    p->SetInvincibility(2.0f);
-    p->ApplySpeedBoost(1.5f, 3.0f);
+    if (p) {
+        p->SetInvincibility(2.0f);
+        p->ApplySpeedBoost(1.5f, 3.0f);
+        }
 }
 
 

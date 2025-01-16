@@ -7,40 +7,10 @@ void BallEntity::OnUpdate()
 {
 	float deltaTime = GetDeltaTime();
 
-	if (rigidBodyDisabled)
-	{
-		rigidBodyDisableTimer -= deltaTime;
-		if (rigidBodyDisableTimer <= 0.0f)
-		{
-			rigidBodyDisabled = false;
-			this->SetRigidBody(true);
-		}
-	}
-
-	if (isMoving)
-	{
-		sf::Vector2f currentPosition = GetPosition();
-		sf::Vector2f direction = targetPosition - currentPosition;
-		float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
-
-		if (distance > 0.1f)
-		{
-			direction /= distance;
-			sf::Vector2f velocity = direction * movementSpeed * GetDeltaTime();
-			if (std::sqrt(velocity.x * velocity.x + velocity.y * velocity.y) >= distance)
-			{
-				SetPosition(targetPosition.x, targetPosition.y);
-				isMoving = false;
-			}
-			else
-			{
-				SetPosition(currentPosition.x + velocity.x, currentPosition.y + velocity.y);
-			}
-		}
-		else
-		{
-			SetPosition(targetPosition.x, targetPosition.y);
-			isMoving = false;
+	if (mThrowTimer > 0.0F) {
+		mThrowTimer -= deltaTime;
+		if (mThrowTimer <= 0.0F) {
+			mThrower = 0;
 		}
 	}
 
@@ -51,12 +21,12 @@ void BallEntity::OnUpdate()
 
 void BallEntity::OnCollision(Entity* other)
 {
-	if (rigidBodyDisabled)
-		return;
 	PlayerEntity* player = dynamic_cast<PlayerEntity*>(other);
 	if (!player) return;
 
-	// TODO : possession here.
+	if (mThrower != player && !player->HasBall()) {
+		GetScene<SampleScene>()->SetBallHolder(player);
+	}
 }
 
 void BallEntity::CollideWithBoundaries()
@@ -85,26 +55,15 @@ void BallEntity::CollideWithBoundaries()
 	}
 }
 
-void BallEntity::MoveTo(sf::Vector2f target, float speed)
+void BallEntity::ThrowAt(PlayerEntity* thrower, const sf::Vector2f& target, float speed)
 {
-	targetPosition = target;
-	movementSpeed = speed;
-	isMoving = true;
-}
+	sf::Vector2f dir = target - this->GetPosition();
+	float len = sqrt(dir.x * dir.x + dir.y * dir.y);
+	dir.x /= len;
+	dir.y /= len;
 
-bool BallEntity::IsMoving() const
-{
-	return isMoving;
-}
+	SetDirection(dir.x, dir.y, speed);
 
-void BallEntity::SetIgnoreCollision(Entity* entity)
-{
-	ignoredEntity = entity;
-}
-
-void BallEntity::DisableRigidBodyTemporarily(float duration)
-{
-	rigidBodyDisabled = true;
-	rigidBodyDisableTimer = duration;
-	this->SetRigidBody(false);
+	mThrower = thrower;
+	mThrowTimer = 1.0F;
 }
