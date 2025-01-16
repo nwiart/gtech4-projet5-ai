@@ -17,9 +17,9 @@ class SampleScene : public Scene
 
 	PlayerEntity* pBallHolder;
 
-private:
-	void TrySetSelectedEntity(DummyEntity* pEntity, int x, int y);
+	bool mDebugMode;
 
+private:
 	void CreatePlayersAndBall();
 	void ResetPlayers();
 	void ResetGame(int teamWithBall);
