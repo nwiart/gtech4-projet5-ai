@@ -27,7 +27,7 @@ void SampleScene::OnEvent(const sf::Event &event)
     // Drop ball on right click.
     if (event.mouseButton.button == sf::Mouse::Button::Right)
     {
-        float angle = rand() / (float)RAND_MAX * 2.0F * 3.14F;
+        /*float angle = rand() / (float)RAND_MAX * 2.0F * 3.14F;
         float vx = cos(angle), vy = sin(angle);
         pBall->SetDirection(vx, vy, 200.0F);
 
@@ -37,13 +37,26 @@ void SampleScene::OnEvent(const sf::Event &event)
         if (pBallHolder)
         {
             pBallHolder = 0;
-        }
-    }
-    if (event.mouseButton.button == sf::Mouse::Button::Left)
-    {
+        }*/
+
         if (pEntitySelected != nullptr)
         {
-            pEntitySelected->GoToPosition(event.mouseButton.x, event.mouseButton.y, 100.f);
+            pEntitySelected->SetPosition(event.mouseButton.x, event.mouseButton.y);
+        }
+    }
+    // Select player.
+    else if (event.mouseButton.button == sf::Mouse::Button::Left)
+    {
+        pEntitySelected = 0;
+        for (int i = 0; i < 5; i++) {
+            if (pPlayersTeam1[i]->IsInside(event.mouseButton.x, event.mouseButton.y)) {
+                pEntitySelected = pPlayersTeam1[i];
+                break;
+            }
+            if (pPlayersTeam2[i]->IsInside(event.mouseButton.x, event.mouseButton.y)) {
+                pEntitySelected = pPlayersTeam2[i];
+                break;
+            }
         }
     }
 }
@@ -134,6 +147,11 @@ void SampleScene::CheckForGoal()
     int goalLineTeam2 = GetWindowWidth() - goalLineTeam1;
     Debug::DrawLine(goalLineTeam2, 0, goalLineTeam2, GetWindowHeight(), sf::Color::White);
     sf::Vector2f ballPos = pBall->GetPosition();
+
+    if (pEntitySelected) {
+        sf::Vector2f v = pEntitySelected->GetPosition();
+        Debug::DrawCircle(v.x, v.y, 10.0F, sf::Color::Blue);
+    }
 
     if (ballPos.x <= goalLineTeam1 && pBallHolder && pBallHolder->GetTeam() == 2)
     {
