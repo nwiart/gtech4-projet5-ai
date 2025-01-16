@@ -33,6 +33,8 @@ class GameManager
 
 	sf::Color mClearColor;
 
+	bool mPaused;
+
 private:
 	GameManager();
 
@@ -58,6 +60,9 @@ public:
 	float GetDeltaTime() const { return mDeltaTime; }
 	Scene* GetScene() const { return mpScene; }
 	sf::Font& GetFont() { return mFont; };
+
+	bool IsPaused() const { return mPaused; }
+	void SetPaused(bool b) { mPaused = b; }
 
 	friend Debug;
 	friend Scene;

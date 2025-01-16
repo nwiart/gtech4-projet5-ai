@@ -12,6 +12,11 @@ float calculateDistance(float x1, float y1, float x2, float y2)
     return std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
+SampleScene::SampleScene()
+{
+
+}
+
 void SampleScene::OnInitialize()
 {
     CreatePlayersAndBall();
@@ -21,43 +26,50 @@ void SampleScene::OnInitialize()
 
 void SampleScene::OnEvent(const sf::Event &event)
 {
-    if (event.type != sf::Event::EventType::MouseButtonPressed)
-        return;
-
-    // Drop ball on right click.
-    if (event.mouseButton.button == sf::Mouse::Button::Right)
+    switch (event.type)
     {
-        /*float angle = rand() / (float)RAND_MAX * 2.0F * 3.14F;
-        float vx = cos(angle), vy = sin(angle);
-        pBall->SetDirection(vx, vy, 200.0F);
-
-        sf::Vector2f pos = pBall->GetPosition();
-        pBall->SetPosition(pos.x + vx * 60.0F, pos.y + vy * 60.0F);
-
-        if (pBallHolder)
+    case sf::Event::EventType::MouseButtonPressed:
+        // Drop ball on right click.
+        if (event.mouseButton.button == sf::Mouse::Button::Right)
         {
-            pBallHolder = 0;
-        }*/
+            /*float angle = rand() / (float)RAND_MAX * 2.0F * 3.14F;
+            float vx = cos(angle), vy = sin(angle);
+            pBall->SetDirection(vx, vy, 200.0F);
 
-        if (pEntitySelected != nullptr)
-        {
-            pEntitySelected->SetPosition(event.mouseButton.x, event.mouseButton.y);
-        }
-    }
-    // Select player.
-    else if (event.mouseButton.button == sf::Mouse::Button::Left)
-    {
-        pEntitySelected = 0;
-        for (int i = 0; i < 5; i++) {
-            if (pPlayersTeam1[i]->IsInside(event.mouseButton.x, event.mouseButton.y)) {
-                pEntitySelected = pPlayersTeam1[i];
-                break;
-            }
-            if (pPlayersTeam2[i]->IsInside(event.mouseButton.x, event.mouseButton.y)) {
-                pEntitySelected = pPlayersTeam2[i];
-                break;
+            sf::Vector2f pos = pBall->GetPosition();
+            pBall->SetPosition(pos.x + vx * 60.0F, pos.y + vy * 60.0F);
+
+            if (pBallHolder)
+            {
+                pBallHolder = 0;
+            }*/
+
+            if (pEntitySelected != nullptr)
+            {
+                pEntitySelected->SetPosition(event.mouseButton.x, event.mouseButton.y);
             }
         }
+        // Select player.
+        else if (event.mouseButton.button == sf::Mouse::Button::Left)
+        {
+            pEntitySelected = 0;
+            for (int i = 0; i < 5; i++) {
+                if (pPlayersTeam1[i]->IsInside(event.mouseButton.x, event.mouseButton.y)) {
+                    pEntitySelected = pPlayersTeam1[i];
+                    break;
+                }
+                if (pPlayersTeam2[i]->IsInside(event.mouseButton.x, event.mouseButton.y)) {
+                    pEntitySelected = pPlayersTeam2[i];
+                    break;
+                }
+            }
+        }
+        break;
+    case sf::Event::EventType::KeyPressed:
+        if (event.key.code == sf::Keyboard::P) {
+            GameManager::Get()->SetPaused(!GameManager::Get()->IsPaused());
+        }
+        break;
     }
 }
 

@@ -9,6 +9,7 @@
 #include <iostream>
 
 GameManager::GameManager()
+	: mPaused(false)
 {
 	mpWindow = nullptr;
 	mDeltaTime = 0.0f;
@@ -91,6 +92,8 @@ void GameManager::HandleInput()
 
 void GameManager::Update()
 {
+	if (mPaused) return;
+
 	mpScene->OnUpdate();
 
     //Update
