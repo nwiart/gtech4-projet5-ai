@@ -16,7 +16,6 @@ public:
     PlayerEntity* GetThrower() const { return mThrower; }
 
 private:
-    void CollideWithBoundaries();
 
     PlayerEntity* mThrower = nullptr;
     float mThrowTimer;

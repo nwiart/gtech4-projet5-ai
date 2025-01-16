@@ -21,6 +21,8 @@ public:
 private:
     //void avoidDefenders(PlayerEntity& player, float deltaTime);
     void passToTeammate(PlayerEntity& player, BallEntity& ball);
+
+    PlayerEntity* GetClosestOpponentInFront(PlayerEntity* player) const;
 };
 
 class TeammateState : public StateAction {

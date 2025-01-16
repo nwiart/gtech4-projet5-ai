@@ -69,6 +69,8 @@ void PlayerEntity::OnUpdate() {
             mSpeedBoost = 1.0f;
         }
     }
+
+    SampleScene::CollideWithBoundaries(this);
 }
 
 bool PlayerEntity::HasBall() const
@@ -85,7 +87,7 @@ void PlayerEntity::OnCollision(Entity* collidedWith) {
     PlayerEntity* otherPlayer = dynamic_cast<PlayerEntity*>(collidedWith);
     if (otherPlayer) {
         SampleScene* scene = GetScene<SampleScene>();
-        if (scene->GetBallHolder() == otherPlayer && otherPlayer->GetTeam() != GetTeam() && !otherPlayer->mIsInvincible) {
+        if (scene->GetBallHolder() == otherPlayer && otherPlayer->mTeam != mTeam && !otherPlayer->mIsInvincible) {
 
             scene->SetBallHolder(this);
         }

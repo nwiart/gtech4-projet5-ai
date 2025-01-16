@@ -156,7 +156,7 @@ void SampleScene::SetBallHolder(PlayerEntity* p)
 {
     pBallHolder = p;
     if (p) {
-        p->SetInvincibility(2.0f);
+        p->SetInvincibility(0.7f);
         p->ApplySpeedBoost(1.5f, 3.0f);
         }
 }
@@ -262,5 +262,31 @@ void SampleScene::DrawDistanceLines()
 
         sf::Vector2f midPoint((holderPos.x + teammatePos.x) / 2, (holderPos.y + teammatePos.y) / 2);
         Debug::DrawText(midPoint.x, midPoint.y, std::to_string(static_cast<int>(distance)), sf::Color::White);
+    }
+}
+
+void SampleScene::CollideWithBoundaries(Entity* entity)
+{
+    sf::Vector2f p0 = entity->GetPosition(0.0f, 0.0f);
+    sf::Vector2f p1 = entity->GetPosition(1.0f, 1.0f);
+    sf::Vector2f off;
+    p1 -= sf::Vector2f(entity->GetScene()->GetWindowWidth(), entity->GetScene()->GetWindowHeight());
+
+    if (p0.x < 0.0F) off.x = p0.x;
+    if (p1.x > 0.0F) off.x = p1.x;
+    if (p0.y < 0.0F) off.y = p0.y;
+    if (p1.y > 0.0F) off.y = p1.y;
+
+    if (off.x != 0.0F || off.y != 0.0F) {
+        entity->SetPosition(p0.x - off.x, p0.y - off.y, 0, 0);
+
+        sf::Vector2f dir = entity->GetDirection();
+        if (off.x != 0.0F) {
+            dir.x = -dir.x;
+        }
+        if (off.y != 0.0F) {
+            dir.y = -dir.y;
+        }
+        entity->SetDirection(dir.x, dir.y);
     }
 }

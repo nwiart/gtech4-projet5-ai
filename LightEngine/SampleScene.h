@@ -40,6 +40,8 @@ public:
 
 	void DrawDistanceLines();
 
+	static void CollideWithBoundaries(Entity* entity);
+
 private:
 	int scoreTeam1 = 0;
 	int scoreTeam2 = 0;

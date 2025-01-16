@@ -14,6 +14,11 @@ namespace
         return std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
 
+    float length(const sf::Vector2f& v)
+    {
+        return std::sqrt(v.x * v.x + v.y * v.y);
+    }
+
     sf::Vector2f calculateDirection(const sf::Vector2f &from, const sf::Vector2f &to)
     {
         sf::Vector2f direction = to - from;
@@ -56,30 +61,34 @@ void PossessionState::update(PlayerEntity& player, BallEntity&, float deltaTime)
     float goalX = (player.GetTeam() == 1) ? player.GetScene()->GetWindowWidth() - 50.0f : 50.0f;
     sf::Vector2f goalPos = { goalX, playerPos.y };
 
-    sf::Vector2f direction = calculateDirection(playerPos, goalPos);
-    player.SetDirection(direction.x, direction.y, 200.0f);
+    //sf::Vector2f direction = calculateDirection(playerPos, goalPos);
+    //player.SetDirection(direction.x, direction.y, 200.0f);
 
     constexpr float THREAT_DISTANCE = 200.0f;
-    bool threatDetected = false;
 
     BallEntity* ball = player.GetScene<SampleScene>()->GetBall();
 
-    if (!player.IsInvincible()) {
-        for (PlayerEntity* opponent : player.GetOpponents())
-        {
-            float distanceToOpponent = calculateDistance(
-                playerPos.x, playerPos.y,
-                opponent->GetPosition().x, opponent->GetPosition().y
-            );
+    // Player direction calculation.
+    sf::Vector2f direction((player.GetTeam() == 1) ? 1.0F : -1.0F, 0.0F);
 
-            if (distanceToOpponent < THREAT_DISTANCE)
-            {
-                passToTeammate(player, *ball);
-                threatDetected = true;
-                break;
-            }
+    PlayerEntity* closestOpponent = GetClosestOpponentInFront(&player);
+    if (closestOpponent) {
+        sf::Vector2f diff = closestOpponent->GetPosition() - player.GetPosition();
+        float dist = length(diff);
+
+        if (dist < THREAT_DISTANCE && !player.IsInvincible())
+        {
+            passToTeammate(player, *ball);
+        }
+        else {
+            float dirSign = closestOpponent->GetDirection().y > 0.0F ? 1.0F : -1.0F;
+            float angle = atan2(diff.y, abs(diff.x)) * 20.0F / (dist);
+
+            direction.y = -angle * 8.0F;
         }
     }
+
+    player.SetDirection(direction.x, direction.y, 200.0f);
 }
 
 void PossessionState::passToTeammate(PlayerEntity& player, BallEntity& ball)
@@ -123,6 +132,28 @@ void PossessionState::passToTeammate(PlayerEntity& player, BallEntity& ball)
             }
         }
     }
+}
+
+PlayerEntity* PossessionState::GetClosestOpponentInFront(PlayerEntity* player) const
+{
+    float dist = INFINITY;
+    PlayerEntity* closest = 0;
+
+    for (PlayerEntity* opponent : player->GetOpponents()) {
+        sf::Vector2f diff = opponent->GetPosition() - player->GetDirection();
+        float xDir = player->GetTeam() == 1 ? 1.0F : -1.0F;
+        float a = length(diff);
+
+        float angle = abs(atan2(diff.y, diff.x * xDir));
+        if (angle >= 2.0F) continue;
+
+        if (a < dist) {
+            dist = a;
+            closest = opponent;
+        }
+    }
+
+    return closest;
 }
 
 // ----------------------------------------------------
