@@ -47,17 +47,14 @@ public:
         if (value < 0.0f)
         {
             riskTaking = 0.0f;
-            std::cout << "Risk factor too low, setting to minimum (0.0)." << std::endl;
         }
         else if (value > 1.0f)
         {
             riskTaking = 1.0f;
-            std::cout << "Risk factor too high, setting to maximum (1.0)." << std::endl;
         }
         else
         {
             riskTaking = value;
-            std::cout << "Risk factor set to: " << riskTaking << std::endl;
         }
     }
 

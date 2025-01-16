@@ -36,6 +36,8 @@ public:
 
 	float GetBallInterceptTime() const { return mBallInterceptTime; }
 
+	void DrawDistanceLines();
+
 private:
 	int scoreTeam1 = 0;
 	int scoreTeam2 = 0;

@@ -128,6 +128,7 @@ void SampleScene::OnUpdate()
         }
 
     CheckForGoal();
+    DrawDistanceLines();
 }
 
 void SampleScene::SetBallHolder(PlayerEntity* p)
@@ -220,4 +221,25 @@ void SampleScene::ResetGame(int teamWithBall)
         }
     }
     sf::Vector2f ballPos = pBall->GetPosition();
+}
+
+
+void SampleScene::DrawDistanceLines()
+{
+    if (!pBallHolder)
+        return;
+
+    sf::Vector2f holderPos = pBallHolder->GetPosition();
+
+    for (PlayerEntity* teammate : pBallHolder->mTeammates)
+    {
+        sf::Vector2f teammatePos = teammate->GetPosition();
+
+        Debug::DrawLine(holderPos.x, holderPos.y, teammatePos.x, teammatePos.y, sf::Color::Yellow);
+
+        float distance = calculateDistance(holderPos.x, holderPos.y, teammatePos.x, teammatePos.y);
+
+        sf::Vector2f midPoint((holderPos.x + teammatePos.x) / 2, (holderPos.y + teammatePos.y) / 2);
+        Debug::DrawText(midPoint.x, midPoint.y, std::to_string(static_cast<int>(distance)), sf::Color::White);
+    }
 }
