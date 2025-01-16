@@ -8,7 +8,8 @@ static float calculateDistance(float x1, float y1, float x2, float y2)
     return std::sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
-PlayerEntity::PlayerEntity()
+PlayerEntity::PlayerEntity() :
+    riskTaking(0.0f)
 {
     int teammateState = mStateMachine.AddState(new TeammateState());
     int opponentState = mStateMachine.AddState(new OpponentState());

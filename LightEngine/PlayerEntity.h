@@ -4,6 +4,8 @@
 #include "StateMachine.h"
 
 #include <vector>
+#include <algorithm>
+#include <iostream>
 
 class SampleScene;
 
@@ -39,6 +41,29 @@ public:
     void ApplySpeedBoost(float boostMultiplier, float duration);
 
     void SetDirection(float x, float y, float speed);
+
+    void SetRiskTaking(float value)
+    {
+        if (value < 0.0f)
+        {
+            riskTaking = 0.0f;
+            std::cout << "Risk factor too low, setting to minimum (0.0)." << std::endl;
+        }
+        else if (value > 1.0f)
+        {
+            riskTaking = 1.0f;
+            std::cout << "Risk factor too high, setting to maximum (1.0)." << std::endl;
+        }
+        else
+        {
+            riskTaking = value;
+            std::cout << "Risk factor set to: " << riskTaking << std::endl;
+        }
+    }
+
+
+    float GetRiskTaking() const { return riskTaking; }
+
 private:
     int mId;
     int mTeam;
@@ -53,4 +78,6 @@ private:
     float mSpeedBoost = 1.0f;
     float mInvincibilityTime = 0.0f;
     float mSpeedBoostTime = 0.0f;
+
+    float riskTaking;
 };

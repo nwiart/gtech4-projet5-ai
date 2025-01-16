@@ -20,6 +20,25 @@ namespace
         float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
         return (length > 0.0f) ? direction / length : sf::Vector2f(0.0f, 0.0f);
     }
+
+    float pointLineDistance(const sf::Vector2f& point, const sf::Vector2f& lineStart, const sf::Vector2f& lineEnd)
+    {
+        sf::Vector2f lineDir = lineEnd - lineStart;
+        float lineLength = std::sqrt(lineDir.x * lineDir.x + lineDir.y * lineDir.y);
+        lineDir /= lineLength;
+
+        sf::Vector2f pointToStart = point - lineStart;
+        float projection = pointToStart.x * lineDir.x + pointToStart.y * lineDir.y;
+
+        if (projection < 0.0f)
+            return std::sqrt(pointToStart.x * pointToStart.x + pointToStart.y * pointToStart.y);
+
+        if (projection > lineLength)
+            return std::sqrt((point - lineEnd).x * (point - lineEnd).x + (point - lineEnd).y * (point - lineEnd).y);
+
+        sf::Vector2f closestPoint = lineStart + projection * lineDir;
+        return std::sqrt((point - closestPoint).x * (point - closestPoint).x + (point - closestPoint).y * (point - closestPoint).y);
+    }
 }
 
 // ----------------------------------------------------
@@ -69,17 +88,37 @@ void PossessionState::passToTeammate(PlayerEntity& player, BallEntity& ball)
     {
         if (!teammate->IsMarked())
         {
-            float distance = calculateDistance(
-                player.GetPosition().x, player.GetPosition().y,
-                teammate->GetPosition().x, teammate->GetPosition().y);
+            sf::Vector2f playerPos = player.GetPosition();
+            sf::Vector2f teammatePos = teammate->GetPosition();
 
+            float distance = calculateDistance(playerPos.x, playerPos.y, teammatePos.x, teammatePos.y);
             if (distance < PASS_DISTANCE)
             {
-                sf::Vector2f targetPosition = teammate->GetPosition();
+                bool intercepted = false;
 
-                ball.ThrowAt(&player, targetPosition, 300.0f); // Déplace la balle vers le coéquipier
+                for (PlayerEntity* opponent : player.GetOpponents())
+                {
+                    sf::Vector2f opponentPos = opponent->GetPosition();
+                    float distanceToPass = pointLineDistance(opponentPos, playerPos, teammatePos);
+
+                    if (distanceToPass < INTERCEPT_DISTANCE)
+                    {
+                        intercepted = true;
+                        break;
+                    }
+                }
+
+                float riskFactor = player.GetRiskTaking();
+
+                if (intercepted && static_cast<float>(std::rand()) / RAND_MAX > riskFactor)
+                {
+                    std::cout << "Passe annulee : trop risque." << std::endl;
+                    continue;
+                }
+
+                ball.ThrowAt(&player, teammatePos, 300.0f);
                 player.GetScene<SampleScene>()->SetBallHolder(0);
-
+                std::cout << "Passe effectuee vers le coequipier !" << std::endl;
                 return;
             }
         }
