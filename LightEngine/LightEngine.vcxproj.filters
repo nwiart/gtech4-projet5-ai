@@ -25,9 +25,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="DummyEntity.cpp">
-      <Filter>Sample</Filter>
-    </ClCompile>
     <ClCompile Include="SampleScene.cpp">
       <Filter>Sample</Filter>
     </ClCompile>
@@ -59,9 +56,6 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="DummyEntity.h">
-      <Filter>Sample</Filter>
     </ClInclude>
     <ClInclude Include="SampleScene.h">
       <Filter>Sample</Filter>
